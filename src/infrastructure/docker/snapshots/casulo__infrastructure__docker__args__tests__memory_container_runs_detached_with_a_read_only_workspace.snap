@@ -1,0 +1,25 @@
+---
+source: src/adapters/docker/args.rs
+expression: "run_steps(&memory)[0].join(\"\\n\")"
+---
+run
+--rm
+--detach
+--init
+--name=casulo-memory-demo
+--cap-drop=ALL
+--security-opt=no-new-privileges
+--pids-limit=1024
+--read-only
+--pull=never
+--tmpfs=/tmp:rw,exec,nosuid,nodev,size=1g,mode=1777
+--tmpfs=/home/casulo:rw,exec,nosuid,nodev,size=1g,uid=1000,gid=1000,mode=0700
+--mount=type=bind,source=/home/me/.casulo/projects/demo/workspace,target=/workspace,readonly
+--workdir=/workspace
+--network=casulo-memory-demo
+--network-alias=memory
+--env=HOME=/home/casulo
+--env=GIT_AUTHOR_NAME=Ada Lovelace
+--env=ANTHROPIC_API_KEY
+casulo/demo:claude
+claude

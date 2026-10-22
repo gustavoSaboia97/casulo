@@ -1,0 +1,13 @@
+---
+source: tests/regression.rs
+expression: sandbox.run(&arguments)
+---
+exit code: 0
+--- stdout
+Workflows of subagents, with their descriptions
+
+Usage: casulo list workflow
+
+Options:
+  -h, --help  Print help
+--- stderr

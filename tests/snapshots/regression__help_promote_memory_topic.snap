@@ -1,0 +1,17 @@
+---
+source: tests/regression.rs
+expression: sandbox.run(&arguments)
+---
+exit code: 0
+--- stdout
+The current branch's notes on this topic
+
+Usage: casulo promote memory topic [OPTIONS] <TOPIC>
+
+Arguments:
+  <TOPIC>  Its name, such as runtime
+
+Options:
+      --project <PROJECT>  Project to use [default: the project of the current directory]
+  -h, --help               Print help
+--- stderr

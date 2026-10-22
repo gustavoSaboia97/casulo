@@ -1,0 +1,81 @@
+# casulo settings for this project. They live outside the repository, so
+# nothing in the cloned code can change them.
+#
+# Commented options show an example; remove the "# " in front of one to use
+# it. `casulo config --project <name>` opens this file and checks it when
+# you close the editor.
+
+{source}
+
+# Agent for this project, overriding the global default_harness.
+# harness = "codex"
+
+# Workspace paths the agent sees as empty and read-only: files that hold
+# secrets, and agent config the repository ships, which could otherwise
+# grant your agent permissions, hooks, MCP servers or subagents. Remove an
+# entry only for a repository you trust.
+mask = {mask}
+
+# Model and reasoning effort for this project, overriding [harness.<name>]
+# in the global casulo.toml, one value at a time.
+# [models.claude]
+# model = "opus"
+# effort = "high"
+
+# [models.codex]
+# model = "gpt-5-codex"
+# effort = "medium"
+
+# Git identity and push for this project, overriding [git] in the global
+# casulo.toml one value at a time.
+{git}
+# Identity of the commits the agent makes. Not set by default.
+# name = "Your Name"
+# email = "you@example.com"
+#
+# Let the agent push from the container, over HTTPS only. Off by default:
+# pushing stays on your machine, with your own credentials.
+#
+# WARNING: with push on, the agent holds a token that can write to the
+# repository. Use a token limited to this repository. protected_branches
+# only stops mistakes: an agent can bypass it (git push --no-verify). To
+# really protect main, add a branch protection rule on the server, for
+# GitHub:
+# https://docs.github.com/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets
+# push = false
+# The token the agent pushes with. casulo creates this file readable only
+# by you. CASULO_GIT_TOKEN exported in your shell wins over it.
+# token = "github_pat_..."
+# The only host git sends the token to. SSH URLs of this host, such as
+# git@github.com:you/app.git, are rewritten to HTTPS in the container only,
+# so your own remote can stay on SSH. Defaults to the host of the project's
+# repository; a project created from a directory gets it from its remote.
+# host = "github.com"
+# Branches the pre-push hook refuses pushes to; globs allowed. Protect them
+# on the server too, as the WARNING above says.
+# protected_branches = ["main", "master"]
+
+# Start the services of the workspace's docker compose file before the agent,
+# and connect the agent to their network, so it reaches them by name
+# (postgres, redis...). The file comes from the repository, so casulo checks
+# it first and asks you to approve every change. Only images, environment,
+# health checks, named volumes and ports on 127.0.0.1 are allowed.
+# `casulo compose check` shows what would run.
+# [compose]
+# enabled = false
+# Compose file, relative to the workspace.
+# file = "docker-compose.yml"
+
+# Give agents a memory of this project's code, shared by every harness: a
+# code graph, search, and notes agents write about what the code does not
+# say. casulo run starts a memory server in its own container, on a network
+# with no internet; agents reach it over MCP and never see its files.
+# [memory]
+# enabled = false
+
+# Commands run as root when casulo builds this project's agent image, after
+# the agent is installed, for tools the project needs, such as a compiler.
+# The container's filesystem is read-only, so nothing can be installed while
+# the agent runs. Run `casulo build` after changing them.
+# [image]
+# install = ["apt-get update && apt-get install --yes --no-install-recommends build-essential && rm -rf /var/lib/apt/lists/*"]

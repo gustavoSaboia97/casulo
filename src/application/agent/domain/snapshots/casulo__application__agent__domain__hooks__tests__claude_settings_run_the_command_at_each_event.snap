@@ -1,0 +1,41 @@
+---
+source: src/application/agent/domain/hooks.rs
+expression: settings
+---
+{
+  "hooks": {
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "command": "node /home/casulo/.casulo/memory-hook.mjs",
+            "timeout": 10,
+            "type": "command"
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "command": "node /home/casulo/.casulo/memory-hook.mjs",
+            "timeout": 10,
+            "type": "command"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "command": "node /home/casulo/.casulo/memory-hook.mjs",
+            "timeout": 10,
+            "type": "command"
+          }
+        ]
+      }
+    ]
+  }
+}

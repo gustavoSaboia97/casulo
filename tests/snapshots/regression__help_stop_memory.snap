@@ -1,0 +1,14 @@
+---
+source: tests/regression.rs
+expression: sandbox.run(&arguments)
+---
+exit code: 0
+--- stdout
+Stop the project's memory server now, even with sessions running
+
+Usage: casulo stop memory [OPTIONS]
+
+Options:
+      --project <PROJECT>  Project to use [default: the project of the current directory]
+  -h, --help               Print help
+--- stderr

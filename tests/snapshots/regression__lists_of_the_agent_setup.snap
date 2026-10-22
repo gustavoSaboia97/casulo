@@ -1,0 +1,31 @@
+---
+source: tests/regression.rs
+expression: output
+---
+$ casulo list
+exit code: 0
+--- stdout
+agent	reviewer	Reviews diffs
+skill	tdd	Test first
+mcp	context7	npx -y @upstash/context7-mcp
+mcp	github	https://api.githubcopilot.com/mcp/
+--- stderr
+
+$ casulo list agent
+exit code: 0
+--- stdout
+reviewer	Reviews diffs
+--- stderr
+
+$ casulo list skill
+exit code: 0
+--- stdout
+tdd	Test first
+--- stderr
+
+$ casulo list mcp
+exit code: 0
+--- stdout
+context7	npx -y @upstash/context7-mcp
+github	https://api.githubcopilot.com/mcp/
+--- stderr

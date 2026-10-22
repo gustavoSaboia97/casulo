@@ -1,0 +1,17 @@
+---
+source: tests/regression.rs
+expression: sandbox.run(&arguments)
+---
+exit code: 0
+--- stdout
+Create a project: clone a repository and prepare its environment
+
+Usage: casulo new [OPTIONS] <SOURCE>
+
+Arguments:
+  <SOURCE>  Git URL to clone, or a directory to use in place, such as `.` or ./app
+
+Options:
+      --name <NAME>  Project name [default: the repository or directory name]
+  -h, --help         Print help
+--- stderr

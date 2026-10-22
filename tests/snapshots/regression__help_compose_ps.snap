@@ -1,0 +1,14 @@
+---
+source: tests/regression.rs
+expression: sandbox.run(&arguments)
+---
+exit code: 0
+--- stdout
+Show the state of the services
+
+Usage: casulo compose ps [OPTIONS]
+
+Options:
+      --project <PROJECT>  Project to use [default: the project of the current directory]
+  -h, --help               Print help
+--- stderr

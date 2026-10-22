@@ -1,0 +1,8 @@
+---
+source: tests/regression.rs
+expression: "sandbox.run(&[\"run\", \"--dry-run\", \"--project\", \"missing\"])"
+---
+exit code: 1
+--- stdout
+--- stderr
+error: project "missing" does not exist; create it with `casulo new <git-url|dir>`

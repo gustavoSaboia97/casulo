@@ -1,0 +1,11 @@
+---
+source: src/domain/compose.rs
+expression: after.changes_since(&before)
+---
+- service cache
+~ service db
+-   image postgres:16
++   image postgres:17
++   env PGUSER=***
++ service mail
++   image mailhog/mailhog

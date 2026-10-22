@@ -1,0 +1,19 @@
+---
+source: tests/regression.rs
+expression: sandbox.run(&arguments)
+---
+exit code: 0
+--- stdout
+Notes in the project's memory
+
+Usage: casulo edit memory [OPTIONS] <COMMAND>
+
+Commands:
+  note   A file's notes, in your editor; saving settles conflicts
+  topic  A project note: general, or of the current branch with --branch
+  help   Print this message or the help of the given subcommand(s)
+
+Options:
+      --project <PROJECT>  Project to use [default: the project of the current directory]
+  -h, --help               Print help
+--- stderr

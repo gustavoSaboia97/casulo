@@ -1,0 +1,15 @@
+---
+source: tests/regression.rs
+expression: "both(&sandbox, &workspace, &[])"
+---
+$ casulo run --dry-run
+exit code: 0
+--- stdout
+casulo-test-missing-runtime run --rm --interactive --cap-drop=ALL --security-opt=no-new-privileges --pids-limit=1024 --read-only --pull=never --tmpfs=/tmp:rw,exec,nosuid,nodev,size=1g,mode=1777 --tmpfs=/home/casulo:rw,exec,nosuid,nodev,size=1g,uid=[UID],gid=[GID],mode=0700 --mount=type=bind,source=[HOME]/projects/demo/workspace,target=/workspace --mount=type=bind,source=[HOME]/projects/demo/config/codex,target=/home/casulo/.codex --mount=type=bind,source=[HOME]/agent/AGENTS.md,target=/home/casulo/.codex/AGENTS.md,readonly --mount=type=bind,source=[HOME]/agent/skills,target=/home/casulo/.agents/skills,readonly --mount=type=bind,source=[HOME]/projects/demo/generated/codex/agents,target=/home/casulo/.codex/agents,readonly --workdir=/workspace --user=[UID]:[GID] --env=HOME=/home/casulo --env=CODEX_HOME=/home/casulo/.codex --env=OPENAI_API_KEY --env=CODEX_API_KEY --env=CONTEXT7_TOKEN --env=GITHUB_TOKEN casulo/demo:codex codex --model gpt-5 -c 'mcp_servers.context7.command="npx"' -c 'mcp_servers.context7.args=["-y", "@upstash/context7-mcp"]' -c 'mcp_servers.context7.env_vars=["CONTEXT7_TOKEN"]' -c 'mcp_servers.github.url="https://api.githubcopilot.com/mcp/"' -c 'mcp_servers.github.bearer_token_env_var="GITHUB_TOKEN"'
+--- stderr
+
+$ casulo shell --dry-run
+exit code: 0
+--- stdout
+casulo-test-missing-runtime run --rm --interactive --cap-drop=ALL --security-opt=no-new-privileges --pids-limit=1024 --read-only --pull=never --tmpfs=/tmp:rw,exec,nosuid,nodev,size=1g,mode=1777 --tmpfs=/home/casulo:rw,exec,nosuid,nodev,size=1g,uid=[UID],gid=[GID],mode=0700 --mount=type=bind,source=[HOME]/projects/demo/workspace,target=/workspace --mount=type=bind,source=[HOME]/projects/demo/config/codex,target=/home/casulo/.codex --mount=type=bind,source=[HOME]/agent/AGENTS.md,target=/home/casulo/.codex/AGENTS.md,readonly --mount=type=bind,source=[HOME]/agent/skills,target=/home/casulo/.agents/skills,readonly --mount=type=bind,source=[HOME]/projects/demo/generated/codex/agents,target=/home/casulo/.codex/agents,readonly --workdir=/workspace --user=[UID]:[GID] --env=HOME=/home/casulo --env=CODEX_HOME=/home/casulo/.codex --env=OPENAI_API_KEY --env=CODEX_API_KEY --env=CONTEXT7_TOKEN --env=GITHUB_TOKEN casulo/demo:codex bash
+--- stderr

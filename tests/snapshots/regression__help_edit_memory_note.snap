@@ -1,0 +1,17 @@
+---
+source: tests/regression.rs
+expression: sandbox.run(&arguments)
+---
+exit code: 0
+--- stdout
+A file's notes, in your editor; saving settles conflicts
+
+Usage: casulo edit memory note [OPTIONS] <PATH>
+
+Arguments:
+  <PATH>  File path relative to the repository root, such as src/main.rs
+
+Options:
+      --project <PROJECT>  Project to use [default: the project of the current directory]
+  -h, --help               Print help
+--- stderr

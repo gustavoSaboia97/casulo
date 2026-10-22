@@ -1,0 +1,12 @@
+---
+source: tests/regression.rs
+expression: "sandbox.run_in(&workspace, &[\"run\", \"--dry-run\"], &[])"
+---
+exit code: 1
+--- stdout
+--- stderr
+error: invalid configuration in [HOME]/config/casulo.toml: TOML parse error at line 1, column 11
+  |
+1 | runtime = 
+  |           ^
+string values must be quoted, expected literal string

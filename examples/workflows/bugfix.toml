@@ -1,0 +1,29 @@
+# The same agents as feature, each told how a bug differs.
+description = "Fix a bug from report to a reviewed, documented branch"
+
+[[step]]
+agent = "analyst"
+task = "Write the expected and actual behavior and the steps to reproduce the bug"
+approve = true          # the user confirms this is the bug
+
+[[step]]
+agent = "planner"
+task = "Find the root cause and plan the smallest fix"
+approve = true
+
+[[step]]
+agent = "implementer"
+task = "Reproduce the bug with a failing regression test first, then fix it"
+
+[[step]]
+agent = "reviewer"
+depends_on = ["implementer"]
+
+[[step]]
+agent = "security-auditor"
+depends_on = ["implementer"]
+
+[[step]]
+agent = "documenter"
+task = "Update the docs only if the fix changed documented behavior; add a CHANGELOG entry"
+depends_on = ["reviewer", "security-auditor"]

@@ -1,0 +1,26 @@
+# Codex CLI, by OpenAI: https://github.com/openai/codex
+name = "codex"
+
+install = ["npm install -g @openai/codex"]
+
+command = ["codex"]
+
+# Login (auth.json), settings and history live in CODEX_HOME. casulo keeps
+# this directory in projects/<name>/config/codex/ between runs.
+config_dir = ".codex"
+config_env = "CODEX_HOME"
+
+auth_env = ["OPENAI_API_KEY", "CODEX_API_KEY"]
+
+instructions_file = "AGENTS.md"
+
+# Session model and reasoning effort, from [harness.codex] in casulo.toml.
+model_args = ["--model", "{model}"]
+effort_args = ["-c", "model_reasoning_effort={effort}"]
+
+# Where your setup from ~/.casulo/agent goes, relative to the container home.
+[inject]
+instructions = ".codex/AGENTS.md"
+skills = ".agents/skills"
+agents = { dir = ".codex/agents", format = "codex-toml" }
+mcp = "codex-config-overrides"

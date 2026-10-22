@@ -1,0 +1,18 @@
+---
+source: tests/regression.rs
+expression: sandbox.run(&arguments)
+---
+exit code: 0
+--- stdout
+Files, their links and notes, and project notes that match the text
+
+Usage: casulo search memory [OPTIONS] <TEXT>
+
+Arguments:
+  <TEXT>  What to look for, such as "docker run arguments"
+
+Options:
+      --project <PROJECT>  Project to use [default: the project of the current directory]
+      --limit <LIMIT>      How many files to return [default: 5]
+  -h, --help               Print help
+--- stderr

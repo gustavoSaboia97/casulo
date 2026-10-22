@@ -1,0 +1,8 @@
+---
+source: tests/regression.rs
+expression: "sandbox.run(&[\"--version\"])"
+---
+exit code: 0
+--- stdout
+casulo 0.1.0
+--- stderr

@@ -1,0 +1,209 @@
+---
+source: tests/regression.rs
+expression: "a_run(\"claude\")"
+---
+$ casulo run
+exit code: 1
+--- stdout
+--- stderr
+warning: [HOME]/config/casulo.toml holds secrets and other users of this machine can read it; run `chmod 600 [HOME]/config/casulo.toml`
+warning: [HOME]/projects/demo/casulo.toml holds secrets and other users of this machine can read it; run `chmod 600 [HOME]/projects/demo/casulo.toml`
+warning: push is enabled: the agent can push with your token. protected_branches only stops mistakes; to really protect main, master, add a branch protection rule on the server: https://docs.github.com/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets
+memory: started
+fake runtime: the agent would start here
+--- runtime calls
+image inspect --format {{.Id}} casulo/demo:claude [secrets: ]
+image inspect --format {{.Id}} casulo/memory:dev [secrets: ]
+network create --internal casulo-memory-demo [secrets: ]
+container inspect --format {{.State.Running}} casulo-memory-demo [secrets: ]
+run --rm --detach --init --name=casulo-memory-demo --cap-drop=ALL --security-opt=no-new-privileges --pids-limit=1024 --read-only --pull=never --tmpfs=/tmp:rw,exec,nosuid,nodev,size=1g,mode=1777 --tmpfs=/home/casulo:rw,exec,nosuid,nodev,size=1g,uid=[UID],gid=[GID],mode=0700 --mount=type=bind,source=[HOME]/projects/demo/workspace,target=/workspace,readonly --mount=type=bind,source=[HOME]/projects/demo/memory,target=/memory --workdir=/workspace --network=casulo-memory-demo --network-alias=memory --user=[UID]:[GID] --env=HOME=/home/casulo --env=GIT_CONFIG_COUNT=1 --env=GIT_CONFIG_KEY_0=safe.directory --env=GIT_CONFIG_VALUE_0=/workspace --env=GIT_OPTIONAL_LOCKS=0 casulo/memory:dev casulo memory serve --dir /memory --workspace /workspace --host 0.0.0.0 --port 7373 [secrets: ]
+create --rm --interactive --name=casulo-demo-claude-[PID] --cap-drop=ALL --security-opt=no-new-privileges --pids-limit=1024 --read-only --pull=never --tmpfs=/tmp:rw,exec,nosuid,nodev,size=1g,mode=1777 --tmpfs=/home/casulo:rw,exec,nosuid,nodev,size=1g,uid=[UID],gid=[GID],mode=0700 --mount=type=bind,source=[HOME]/projects/demo/workspace,target=/workspace --mount=type=bind,source=[HOME]/projects/demo/config/claude,target=/home/casulo/.claude --mount=type=bind,source=[HOME]/agent/AGENTS.md,target=/home/casulo/.claude/CLAUDE.md,readonly --mount=type=bind,source=[HOME]/agent/skills,target=/home/casulo/.claude/skills,readonly --mount=type=bind,source=[HOME]/projects/demo/generated/claude/agents,target=/home/casulo/.claude/agents,readonly --mount=type=bind,source=[HOME]/projects/demo/generated/claude/mcp.json,target=/home/casulo/.casulo/mcp.json,readonly --mount=type=bind,source=[HOME]/projects/demo/generated/claude/settings.json,target=/home/casulo/.casulo/settings.json,readonly --mount=type=bind,source=[HOME]/projects/demo/generated/claude/memory-hook.mjs,target=/home/casulo/.casulo/memory-hook.mjs,readonly --mount=type=bind,source=[HOME]/projects/demo/push,target=/etc/casulo,readonly --mount=type=bind,source=[HOME]/projects/demo/masks/empty-file,target=/workspace/.env,readonly --workdir=/workspace --user=[UID]:[GID] --env=HOME=/home/casulo --env=GIT_AUTHOR_NAME=Ada --env=GIT_COMMITTER_NAME=Ada --env=GIT_AUTHOR_EMAIL=ada@example.com --env=GIT_COMMITTER_EMAIL=ada@example.com --env=GIT_CONFIG_COUNT=2 --env=GIT_CONFIG_KEY_0=user.name --env=GIT_CONFIG_VALUE_0=Ada --env=GIT_CONFIG_KEY_1=user.email --env=GIT_CONFIG_VALUE_1=ada@example.com --env=CLAUDE_CONFIG_DIR=/home/casulo/.claude --env=ANTHROPIC_API_KEY --env=CLAUDE_CODE_OAUTH_TOKEN --env=CASULO_SESSION=[PID] --env=CONTEXT7_TOKEN --env=GITHUB_TOKEN --env=CASULO_GIT_TOKEN casulo/demo:claude claude --mcp-config /home/casulo/.casulo/mcp.json --settings /home/casulo/.casulo/settings.json [secrets: CASULO_GIT_TOKEN CONTEXT7_TOKEN ]
+network connect casulo-memory-demo casulo-demo-claude-[PID] [secrets: CASULO_GIT_TOKEN CONTEXT7_TOKEN ]
+start --attach --interactive casulo-demo-claude-[PID] [secrets: CASULO_GIT_TOKEN CONTEXT7_TOKEN ]
+ps --filter network=casulo-memory-demo --format {{.Names}} [secrets: ]
+stop casulo-memory-demo [secrets: ]
+
+=== config/
+
+=== config/claude/
+
+=== config/claude/.claude.json
+{"hasCompletedOnboarding": true, "projects": {"/workspace": {"hasTrustDialogAccepted": true}}}
+=== config/claude/CLAUDE.md
+
+=== config/claude/agents/
+
+=== config/claude/skills/
+
+=== generated/
+
+=== generated/claude/
+
+=== generated/claude/agents/
+
+=== generated/claude/agents/reviewer.md
+---
+name: "reviewer"
+description: "Reviews diffs"
+---
+
+Report real problems.
+
+=== generated/claude/mcp.json
+{
+  "mcpServers": {
+    "context7": {
+      "args": [
+        "-y",
+        "@upstash/context7-mcp"
+      ],
+      "command": "npx",
+      "env": {
+        "CONTEXT7_TOKEN": "${CONTEXT7_TOKEN}"
+      }
+    },
+    "github": {
+      "headers": {
+        "Authorization": "Bearer ${GITHUB_TOKEN}"
+      },
+      "type": "http",
+      "url": "https://api.githubcopilot.com/mcp/"
+    },
+    "memory": {
+      "headers": {
+        "X-Casulo-Session": "${CASULO_SESSION}"
+      },
+      "type": "http",
+      "url": "http://memory:7373/mcp/claude"
+    }
+  }
+}
+
+=== generated/claude/memory-hook.mjs
+// casulo's memory hook: relays one hook of the agent to the memory server
+// and prints its answer, which the agent reads. casulo puts the server's
+// URL in the fetch below when it generates this file. It fails open: without
+// a session, on any error or after 5 seconds it prints nothing, and the agent
+// goes on as without it.
+
+// The deadline covers reading stdin, connecting and the answer, and ends the
+// process well before the harness gives up on the hook.
+setTimeout(() => process.exit(0), 5000);
+const session = process.env.CASULO_SESSION;
+let answer = "";
+if (session) {
+  try {
+    process.stdin.setEncoding("utf8");
+    let body = "";
+    for await (const chunk of process.stdin) {
+      body += chunk;
+    }
+    const response = await fetch("http://memory:7373/hooks/claude", {
+      method: "POST",
+      headers: { "content-type": "application/json", "x-casulo-session": session },
+      body,
+    });
+    if (response.ok) {
+      answer = await response.text();
+    }
+  } catch {
+    // Fail open: the agent must never be stuck on memory.
+  }
+}
+// Writes to a pipe are synchronous in Node on Linux, so exiting right after
+// cannot cut the answer.
+process.stdout.write(answer);
+process.exit(0);
+
+=== generated/claude/settings.json
+{
+  "hooks": {
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "command": "node /home/casulo/.casulo/memory-hook.mjs",
+            "timeout": 10,
+            "type": "command"
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "command": "node /home/casulo/.casulo/memory-hook.mjs",
+            "timeout": 10,
+            "type": "command"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "command": "node /home/casulo/.casulo/memory-hook.mjs",
+            "timeout": 10,
+            "type": "command"
+          }
+        ]
+      }
+    ]
+  }
+}
+
+=== masks/
+
+=== masks/empty-dir/
+
+=== masks/empty-file
+
+=== memory/
+
+=== push-reminder-shown
+
+=== push/
+
+=== push/hooks/
+
+=== push/hooks/pre-push
+#!/bin/sh
+# Generated by casulo on every run. Stops pushes to protected branches and
+# branch deletions. It prevents mistakes only: `git push --no-verify` skips
+# it, so protect your branches on the server too.
+status=0
+while read -r local_ref local_sha remote_ref remote_sha; do
+    case "$local_sha" in
+        *[!0]*) ;;
+        *)
+            echo "casulo: deleting $remote_ref is blocked; delete remote branches yourself" >&2
+            status=1
+            continue
+            ;;
+    esac
+    branch=${remote_ref#refs/heads/}
+    case "$branch" in
+        main|master)
+            echo "casulo: pushing to $branch is blocked by protected_branches in casulo.toml; push another branch and open a pull request" >&2
+            status=1
+            ;;
+    esac
+done
+exit $status
+
+=== push/push.gitconfig
+# Generated by casulo on every run. Read-only in the container.
+[credential "https://example.com"]
+	helper = "!f() { test $1 = get && echo username=x-access-token && echo password=$CASULO_GIT_TOKEN; }; f"
+[url "https://example.com/"]
+	insteadOf = git@example.com:
+	insteadOf = ssh://git@example.com/
+[core]
+	hooksPath = /etc/casulo/hooks
+
+=== workspace/
+
+=== workspace/.env
+TOKEN=secret

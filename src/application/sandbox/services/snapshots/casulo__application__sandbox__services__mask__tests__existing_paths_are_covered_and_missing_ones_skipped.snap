@@ -1,0 +1,7 @@
+---
+source: src/services/mask.rs
+expression: "describe(&mounts, &home)"
+---
+~/.casulo/projects/demo/masks/empty-file -> /workspace/.env (read-only)
+~/.casulo/projects/demo/masks/empty-file -> /workspace/config/secrets.json (read-only)
+~/.casulo/projects/demo/masks/empty-dir -> /workspace/config/keys (read-only)

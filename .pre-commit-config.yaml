@@ -1,0 +1,74 @@
+# Git hooks for casulo, run by prek (https://github.com/j178/prek), not by
+# Python's pre-commit: the `builtin` hooks ship inside prek. Install once on
+# the host with `prek install`. They do not run in the casulo container.
+# Tested with prek 0.5.5.
+
+# What a plain `prek install` sets up.
+default_install_hook_types: [pre-commit, commit-msg, pre-push]
+# A hook without `stages` would also run on commit-msg and pre-push. Three
+# builtins declare pre-push themselves, so they set `stages` below.
+default_stages: [pre-commit]
+
+repos:
+  - repo: builtin
+    hooks:
+      # Outside a merge too: CI never runs in one, and a marker can be
+      # committed after the merge ends.
+      - id: check-merge-conflict
+        args: [--assume-in-merge]
+      # A template whose `{placeholders}` casulo fills in, so not TOML yet.
+      - id: check-toml
+        exclude: '^templates/project\.toml$'
+      - id: check-yaml
+      - id: check-case-conflict
+      - id: check-illegal-windows-names
+      - id: check-added-large-files
+        stages: [pre-commit]
+      - id: detect-private-key
+      # Snapshots freeze casulo's output byte for byte, trailing spaces too.
+      - id: trailing-whitespace
+        args: [--markdown-linebreak-ext=md]
+        stages: [pre-commit]
+        exclude: '\.snap$'
+      - id: end-of-file-fixer
+        stages: [pre-commit]
+        exclude: '\.snap$'
+
+  - repo: local
+    hooks:
+      - id: cargo-fmt
+        name: cargo fmt
+        language: system
+        entry: cargo fmt --all -- --check
+        types: [rust]
+        pass_filenames: false
+      # The commit message rule of AGENTS.md; prek passes the message file.
+      - id: commit-message
+        name: commit message rule
+        language: system
+        entry: cargo xtask commit-msg
+        stages: [commit-msg]
+      # The branch rule of AGENTS.md, for the branch a push creates or updates.
+      - id: branch-name
+        name: branch name rule
+        language: system
+        entry: cargo xtask branch-name
+        stages: [pre-push]
+        pass_filenames: false
+        always_run: true
+      # On push, not on commit: they take tens of seconds or more. They run
+      # on every push, since the commits pushed may touch any file.
+      - id: cargo-clippy
+        name: cargo clippy
+        language: system
+        entry: cargo clippy --workspace --all-targets -- -D warnings
+        stages: [pre-push]
+        pass_filenames: false
+        always_run: true
+      - id: cargo-test
+        name: cargo test
+        language: system
+        entry: cargo test --workspace
+        stages: [pre-push]
+        pass_filenames: false
+        always_run: true

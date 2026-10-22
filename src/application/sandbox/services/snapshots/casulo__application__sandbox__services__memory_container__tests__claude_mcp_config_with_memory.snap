@@ -1,0 +1,12 @@
+---
+source: src/services/memory.rs
+expression: "crate::domain::mcp_server::claude_mcp_config(&[mcp_server(&claude)])"
+---
+{
+  "mcpServers": {
+    "memory": {
+      "type": "http",
+      "url": "http://memory:7373/mcp/claude"
+    }
+  }
+}

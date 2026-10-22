@@ -1,0 +1,10 @@
+---
+source: tests/regression.rs
+expression: "sandbox.run(&[\"harness\", \"list\"])"
+---
+exit code: 0
+--- stdout
+claude	built-in	instructions,skills,agents,mcp,hooks,model,effort
+codex	[HOME]/harnesses/codex.toml	nothing injected
+plain	[HOME]/harnesses/plain.toml	nothing injected
+--- stderr

@@ -1,0 +1,17 @@
+---
+source: tests/regression.rs
+expression: "both(&sandbox, &workspace, &[])"
+---
+$ casulo run --dry-run
+exit code: 0
+--- stdout
+casulo-test-missing-runtime run --rm --interactive --cap-drop=ALL --security-opt=no-new-privileges --pids-limit=1024 --read-only --pull=never --tmpfs=/tmp:rw,exec,nosuid,nodev,size=1g,mode=1777 --tmpfs=/home/casulo:rw,exec,nosuid,nodev,size=1g,uid=[UID],gid=[GID],mode=0700 --mount=type=bind,source=[HOME]/projects/demo/workspace,target=/workspace --workdir=/workspace --user=[UID]:[GID] --env=HOME=/home/casulo casulo/demo:plain plain
+--- stderr
+warning: harness "plain" cannot receive MCP servers, so memory is off for this run
+
+$ casulo shell --dry-run
+exit code: 0
+--- stdout
+casulo-test-missing-runtime run --rm --interactive --cap-drop=ALL --security-opt=no-new-privileges --pids-limit=1024 --read-only --pull=never --tmpfs=/tmp:rw,exec,nosuid,nodev,size=1g,mode=1777 --tmpfs=/home/casulo:rw,exec,nosuid,nodev,size=1g,uid=[UID],gid=[GID],mode=0700 --mount=type=bind,source=[HOME]/projects/demo/workspace,target=/workspace --workdir=/workspace --user=[UID]:[GID] --env=HOME=/home/casulo casulo/demo:plain bash
+--- stderr
+warning: harness "plain" cannot receive MCP servers, so memory is off for this run

@@ -1,0 +1,10 @@
+[package]
+name = "xtask"
+version = "0.0.0"
+edition = "2024"
+description = "Checks for casulo's own repository, run as `cargo xtask <task>`."
+license = "GPL-3.0-only"
+publish = false
+
+[lints]
+workspace = true

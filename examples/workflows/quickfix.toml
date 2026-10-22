@@ -1,0 +1,11 @@
+# Only for an extremely simple change, such as a typo or a one-line fix.
+# Anything more goes through bugfix or feature.
+description = "Make an extremely simple fix, such as a typo or a one-line change, and review it"
+
+[[step]]
+agent = "implementer"
+task = "Make the fix, with a regression test when it changes behavior"
+
+[[step]]
+agent = "reviewer"
+approve = true          # the user decides what to do with the findings

@@ -1,0 +1,13 @@
+---
+source: tests/regression.rs
+expression: sandbox.run(&arguments)
+---
+exit code: 0
+--- stdout
+Create ~/.casulo with documented defaults, then install or fix what casulo needs, asking before each command
+
+Usage: casulo setup
+
+Options:
+  -h, --help  Print help
+--- stderr

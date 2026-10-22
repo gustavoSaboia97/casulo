@@ -1,0 +1,4 @@
+# Build context of the memory image in a development build (casulo build
+# with memory on): only the source is needed.
+target/
+.git/

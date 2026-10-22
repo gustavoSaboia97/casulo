@@ -1,0 +1,9 @@
+---
+source: src/domain/subagent.rs
+expression: text
+---
+name = "reviewer"
+description = "Reviews the diff for bugs and security problems"
+model = "gpt-5-codex-mini"
+model_reasoning_effort = "low"
+developer_instructions = "You are a code reviewer. Read the diff and report only real problems."

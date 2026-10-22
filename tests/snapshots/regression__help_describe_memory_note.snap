@@ -1,0 +1,17 @@
+---
+source: tests/regression.rs
+expression: sandbox.run(&arguments)
+---
+exit code: 0
+--- stdout
+A file's neighbors in the code graph and its notes
+
+Usage: casulo describe memory note [OPTIONS] <PATH>
+
+Arguments:
+  <PATH>  File path relative to the repository root, such as src/main.rs
+
+Options:
+      --project <PROJECT>  Project to use [default: the project of the current directory]
+  -h, --help               Print help
+--- stderr

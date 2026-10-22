@@ -1,0 +1,5 @@
+---
+source: src/services/memory.rs
+expression: "line.args.join(\" \").replace('\\\\', \"/\")"
+---
+run --rm --detach --init --name=casulo-memory-demo --cap-drop=ALL --security-opt=no-new-privileges --pids-limit=1024 --read-only --pull=never --tmpfs=/tmp:rw,exec,nosuid,nodev,size=1g,mode=1777 --tmpfs=/home/casulo:rw,exec,nosuid,nodev,size=1g,uid=1001,gid=1002,mode=0700 --mount=type=bind,source=/home/me/code/demo,target=/workspace,readonly --mount=type=bind,source=/home/me/.casulo/projects/demo/memory,target=/memory --workdir=/workspace --network=casulo-memory-demo --network-alias=memory --user=1001:1002 --env=HOME=/home/casulo --env=GIT_CONFIG_COUNT=1 --env=GIT_CONFIG_KEY_0=safe.directory --env=GIT_CONFIG_VALUE_0=/workspace --env=GIT_OPTIONAL_LOCKS=0 casulo/memory:dev casulo memory serve --dir /memory --workspace /workspace --host 0.0.0.0 --port 7373

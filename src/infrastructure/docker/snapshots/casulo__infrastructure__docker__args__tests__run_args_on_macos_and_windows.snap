@@ -1,0 +1,22 @@
+---
+source: src/adapters/docker/args.rs
+expression: "run_args(&spec(None)).join(\"\\n\")"
+---
+run
+--rm
+--interactive
+--tty
+--cap-drop=ALL
+--security-opt=no-new-privileges
+--pids-limit=1024
+--read-only
+--pull=never
+--tmpfs=/tmp:rw,exec,nosuid,nodev,size=1g,mode=1777
+--tmpfs=/home/casulo:rw,exec,nosuid,nodev,size=1g,uid=1000,gid=1000,mode=0700
+--mount=type=bind,source=/home/me/.casulo/projects/demo/workspace,target=/workspace
+--workdir=/workspace
+--env=HOME=/home/casulo
+--env=GIT_AUTHOR_NAME=Ada Lovelace
+--env=ANTHROPIC_API_KEY
+casulo/demo:claude
+claude

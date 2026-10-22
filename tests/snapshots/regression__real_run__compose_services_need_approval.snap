@@ -1,0 +1,40 @@
+---
+source: tests/regression.rs
+expression: "format!(\"{refused}\\n{approved}\\n{up_to_date}\")"
+---
+$ casulo run
+exit code: 1
+--- stdout
+--- stderr
+casulo will start these services:
+service cache
+  image redis:7
+start these services for the agent? [y/N] 
+error: the services were not approved, so none will be started; review them with `casulo compose check`
+--- runtime calls
+compose --project-name casulo-demo --project-directory [HOME]/projects/demo/workspace --file [HOME]/projects/demo/workspace/docker-compose.yml config --format json [secrets: ]
+image inspect --format {{.Id}} casulo/demo:claude [secrets: ]
+
+$ casulo run
+exit code: 0
+--- stdout
+--- stderr
+casulo will start these services:
+service cache
+  image redis:7
+start these services for the agent? [y/N] approved
+--- runtime calls
+compose --project-name casulo-demo --project-directory [HOME]/projects/demo/workspace --file [HOME]/projects/demo/workspace/docker-compose.yml config --format json [secrets: ]
+image inspect --format {{.Id}} casulo/demo:claude [secrets: ]
+compose --project-name casulo-demo --project-directory [HOME]/projects/demo/compose --file - up --detach --wait [secrets: ]
+run --rm --interactive --cap-drop=ALL --security-opt=no-new-privileges --pids-limit=1024 --read-only --pull=never --tmpfs=/tmp:rw,exec,nosuid,nodev,size=1g,mode=1777 --tmpfs=/home/casulo:rw,exec,nosuid,nodev,size=1g,uid=[UID],gid=[GID],mode=0700 --mount=type=bind,source=[HOME]/projects/demo/workspace,target=/workspace --mount=type=bind,source=[HOME]/projects/demo/config/claude,target=/home/casulo/.claude --workdir=/workspace --network=casulo-demo_default --user=[UID]:[GID] --env=HOME=/home/casulo --env=CLAUDE_CONFIG_DIR=/home/casulo/.claude --env=ANTHROPIC_API_KEY --env=CLAUDE_CODE_OAUTH_TOKEN casulo/demo:claude claude [secrets: ]
+
+$ casulo run
+exit code: 0
+--- stdout
+--- stderr
+--- runtime calls
+compose --project-name casulo-demo --project-directory [HOME]/projects/demo/workspace --file [HOME]/projects/demo/workspace/docker-compose.yml config --format json [secrets: ]
+image inspect --format {{.Id}} casulo/demo:claude [secrets: ]
+compose --project-name casulo-demo --project-directory [HOME]/projects/demo/compose --file - up --detach --wait [secrets: ]
+run --rm --interactive --cap-drop=ALL --security-opt=no-new-privileges --pids-limit=1024 --read-only --pull=never --tmpfs=/tmp:rw,exec,nosuid,nodev,size=1g,mode=1777 --tmpfs=/home/casulo:rw,exec,nosuid,nodev,size=1g,uid=[UID],gid=[GID],mode=0700 --mount=type=bind,source=[HOME]/projects/demo/workspace,target=/workspace --mount=type=bind,source=[HOME]/projects/demo/config/claude,target=/home/casulo/.claude --workdir=/workspace --network=casulo-demo_default --user=[UID]:[GID] --env=HOME=/home/casulo --env=CLAUDE_CONFIG_DIR=/home/casulo/.claude --env=ANTHROPIC_API_KEY --env=CLAUDE_CODE_OAUTH_TOKEN casulo/demo:claude claude [secrets: ]

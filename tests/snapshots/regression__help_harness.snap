@@ -1,0 +1,17 @@
+---
+source: tests/regression.rs
+expression: sandbox.run(&arguments)
+---
+exit code: 0
+--- stdout
+Work with harnesses, the descriptions of how to install and run each agent
+
+Usage: casulo harness <COMMAND>
+
+Commands:
+  list  List the available harnesses, where each one comes from and what it receives
+  help  Print this message or the help of the given subcommand(s)
+
+Options:
+  -h, --help  Print help
+--- stderr

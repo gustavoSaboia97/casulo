@@ -1,0 +1,30 @@
+---
+source: tests/regression.rs
+expression: sandbox.run(&arguments)
+---
+exit code: 0
+--- stdout
+Delete a subagent, skill, MCP server or workflow
+
+Usage: casulo delete [OPTIONS] <KIND> <NAME>
+
+Arguments:
+  <KIND>
+          What to work on
+
+          Possible values:
+          - agent:    A subagent, `agents/<name>.md`
+          - skill:    An Agent Skill, `skills/<name>/SKILL.md`
+          - mcp:      An MCP server, `mcp/<name>.toml`
+          - workflow: A workflow of subagents, `workflows/<name>.toml`
+
+  <NAME>
+          Its name, such as code-reviewer
+
+Options:
+      --yes
+          Delete without asking
+
+  -h, --help
+          Print help (see a summary with '-h')
+--- stderr

@@ -1,0 +1,15 @@
+---
+source: tests/regression.rs
+expression: "both(&sandbox, &workspace, &[])"
+---
+$ casulo run --dry-run
+exit code: 0
+--- stdout
+casulo-test-missing-runtime run --rm --interactive --cap-drop=ALL --security-opt=no-new-privileges --pids-limit=1024 --read-only --pull=never --tmpfs=/tmp:rw,exec,nosuid,nodev,size=1g,mode=1777 --tmpfs=/home/casulo:rw,exec,nosuid,nodev,size=1g,uid=[UID],gid=[GID],mode=0700 --mount=type=bind,source=[HOME]/projects/demo/workspace,target=/workspace --mount=type=bind,source=[HOME]/projects/demo/config/claude,target=/home/casulo/.claude --mount=type=bind,source=[HOME]/projects/demo/masks/empty-file,target=/workspace/.env,readonly --mount=type=bind,source=[HOME]/projects/demo/masks/empty-dir,target=/workspace/.claude/agents,readonly --workdir=/workspace --user=[UID]:[GID] --env=HOME=/home/casulo --env=CLAUDE_CONFIG_DIR=/home/casulo/.claude --env=ANTHROPIC_API_KEY --env=CLAUDE_CODE_OAUTH_TOKEN casulo/demo:claude claude
+--- stderr
+
+$ casulo shell --dry-run
+exit code: 0
+--- stdout
+casulo-test-missing-runtime run --rm --interactive --cap-drop=ALL --security-opt=no-new-privileges --pids-limit=1024 --read-only --pull=never --tmpfs=/tmp:rw,exec,nosuid,nodev,size=1g,mode=1777 --tmpfs=/home/casulo:rw,exec,nosuid,nodev,size=1g,uid=[UID],gid=[GID],mode=0700 --mount=type=bind,source=[HOME]/projects/demo/workspace,target=/workspace --mount=type=bind,source=[HOME]/projects/demo/config/claude,target=/home/casulo/.claude --mount=type=bind,source=[HOME]/projects/demo/masks/empty-file,target=/workspace/.env,readonly --mount=type=bind,source=[HOME]/projects/demo/masks/empty-dir,target=/workspace/.claude/agents,readonly --workdir=/workspace --user=[UID]:[GID] --env=HOME=/home/casulo --env=CLAUDE_CONFIG_DIR=/home/casulo/.claude --env=ANTHROPIC_API_KEY --env=CLAUDE_CODE_OAUTH_TOKEN casulo/demo:claude bash
+--- stderr

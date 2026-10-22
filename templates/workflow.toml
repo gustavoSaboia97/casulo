@@ -1,0 +1,20 @@
+# Workflow "{name}": steps the main agent hands to your subagents, in order.
+# Saving it writes the skill workflow-{name}; start it by asking the agent
+# to "use the workflow-{name} skill to ...".
+
+# What the workflow does. Required.
+description = "Describe what {name} does"
+
+# One [[step]] per piece of work. Uncomment and repeat.
+# [[step]]
+# The subagent that does it, from `casulo list agent`. Required.
+# agent = "planner"
+# Its id for depends_on; the subagent's name when left out.
+# id = "plan"
+# What to ask of the subagent, beyond its own instructions. Optional.
+# task = "Write the plan in docs/plan-<topic>.md"
+# Stop and ask the user to approve its result before going on.
+# approve = true
+# The steps that must finish first. Left out, the step above; [] for none.
+# Steps that wait for the same ones may run in parallel.
+# depends_on = ["plan"]

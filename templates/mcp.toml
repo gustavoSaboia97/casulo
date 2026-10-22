@@ -1,0 +1,11 @@
+# MCP server "{name}". Uncomment one of the two forms below.
+# Secrets are never written here: list variable names, and casulo passes
+# their values from your environment into the container.
+
+# A program the agent starts in the container:
+# command = ["npx", "-y", "@upstash/context7-mcp"]
+# env = ["CONTEXT7_TOKEN"]
+
+# A server over HTTP, with a token sent as Authorization: Bearer:
+# url = "https://api.githubcopilot.com/mcp/"
+# token_env = "GITHUB_TOKEN"

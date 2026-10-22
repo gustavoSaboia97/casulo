@@ -1,0 +1,13 @@
+---
+source: tests/regression.rs
+expression: sandbox.run(&arguments)
+---
+exit code: 0
+--- stdout
+MCP servers, with their commands or URLs
+
+Usage: casulo list mcp
+
+Options:
+  -h, --help  Print help
+--- stderr

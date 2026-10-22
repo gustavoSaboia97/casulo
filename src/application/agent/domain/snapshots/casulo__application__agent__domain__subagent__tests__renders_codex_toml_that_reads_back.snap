@@ -1,0 +1,12 @@
+---
+source: src/domain/subagent.rs
+expression: text
+---
+name = "tricky"
+description = '''
+Says "hi" \ and
+spans: lines'''
+developer_instructions = """
+Line one.
+
+Line "two"."""

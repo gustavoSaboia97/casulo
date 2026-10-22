@@ -1,0 +1,12 @@
+---
+source: src/domain/compose.rs
+expression: problems_of(escape)
+---
+the compose file asks for things casulo does not allow:
+  - service "escape": cap_add is not allowed
+  - service "escape": network_mode is not allowed
+  - service "escape": privileged is not allowed
+  - service "escape": port 8080 is published on every network interface; publish it on 127.0.0.1 only, such as "127.0.0.1:8080:80"
+  - service "escape": the bind mount on /host is not allowed; only named volumes are, such as "data:/host"
+  - service "escape": the bind mount on /data is not allowed; only named volumes are, such as "data:/data"
+casulo allows images, environment, health checks, named volumes, ports on 127.0.0.1 and the project's own networks

@@ -1,0 +1,27 @@
+---
+source: src/services/inject.rs
+expression: "run_args_with_mcp(&home, &harness, &with_mcp_servers())"
+---
+run
+--rm
+--interactive
+--tty
+--cap-drop=ALL
+--security-opt=no-new-privileges
+--pids-limit=1024
+--read-only
+--pull=never
+--tmpfs=/tmp:rw,exec,nosuid,nodev,size=1g,mode=1777
+--tmpfs=/home/casulo:rw,exec,nosuid,nodev,size=1g,uid=1000,gid=1000,mode=0700
+--mount=type=bind,source=~/.casulo/projects/demo/workspace,target=/workspace
+--mount=type=bind,source=~/.casulo/projects/demo/generated/claude/mcp.json,target=/home/casulo/.casulo/mcp.json,readonly
+--workdir=/workspace
+--env=HOME=/home/casulo
+--env=CLAUDE_CONFIG_DIR=/home/casulo/.claude
+--env=ANTHROPIC_API_KEY
+--env=CLAUDE_CODE_OAUTH_TOKEN
+--env=CONTEXT7_TOKEN
+casulo/demo:claude
+claude
+--mcp-config
+/home/casulo/.casulo/mcp.json

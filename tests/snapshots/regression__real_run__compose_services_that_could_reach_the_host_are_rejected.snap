@@ -1,0 +1,23 @@
+---
+source: tests/regression.rs
+expression: "format!(\"{check}\\n{run}\")"
+---
+$ casulo compose check
+exit code: 1
+--- stdout
+--- stderr
+error: [HOME]/projects/demo/workspace/docker-compose.yml cannot be started by casulo: the compose file asks for things casulo does not allow:
+  - service "cache": privileged is not allowed
+casulo allows images, environment, health checks, named volumes, ports on 127.0.0.1 and the project's own networks
+--- runtime calls
+compose --project-name casulo-demo --project-directory [HOME]/projects/demo/workspace --file [HOME]/projects/demo/workspace/docker-compose.yml config --format json [secrets: ]
+
+$ casulo run
+exit code: 1
+--- stdout
+--- stderr
+error: [HOME]/projects/demo/workspace/docker-compose.yml cannot be started by casulo: the compose file asks for things casulo does not allow:
+  - service "cache": privileged is not allowed
+casulo allows images, environment, health checks, named volumes, ports on 127.0.0.1 and the project's own networks
+--- runtime calls
+compose --project-name casulo-demo --project-directory [HOME]/projects/demo/workspace --file [HOME]/projects/demo/workspace/docker-compose.yml config --format json [secrets: ]

@@ -1,0 +1,35 @@
+---
+source: src/services/inject.rs
+expression: "run_args_with_mcp(&home, &harness, &with_mcp_servers())"
+---
+run
+--rm
+--interactive
+--tty
+--cap-drop=ALL
+--security-opt=no-new-privileges
+--pids-limit=1024
+--read-only
+--pull=never
+--tmpfs=/tmp:rw,exec,nosuid,nodev,size=1g,mode=1777
+--tmpfs=/home/casulo:rw,exec,nosuid,nodev,size=1g,uid=1000,gid=1000,mode=0700
+--mount=type=bind,source=~/.casulo/projects/demo/workspace,target=/workspace
+--workdir=/workspace
+--env=HOME=/home/casulo
+--env=CODEX_HOME=/home/casulo/.codex
+--env=OPENAI_API_KEY
+--env=CODEX_API_KEY
+--env=CONTEXT7_TOKEN
+--env=ANTHROPIC_API_KEY
+casulo/demo:codex
+codex
+-c
+mcp_servers.context7.command="npx"
+-c
+mcp_servers.context7.args=["-y", "@upstash/context7-mcp"]
+-c
+mcp_servers.context7.env_vars=["CONTEXT7_TOKEN", "ANTHROPIC_API_KEY"]
+-c
+mcp_servers.github.url="https://api.githubcopilot.com/mcp/"
+-c
+mcp_servers.github.bearer_token_env_var="CONTEXT7_TOKEN"

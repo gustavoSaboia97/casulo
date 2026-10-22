@@ -1,0 +1,29 @@
+---
+source: src/domain/mcp_server.rs
+expression: json
+---
+{
+  "mcpServers": {
+    "context7": {
+      "args": [
+        "-y",
+        "@upstash/context7-mcp"
+      ],
+      "command": "npx",
+      "env": {
+        "CONTEXT7_TOKEN": "${CONTEXT7_TOKEN}"
+      }
+    },
+    "docs": {
+      "type": "http",
+      "url": "http://localhost:3000/mcp"
+    },
+    "github": {
+      "headers": {
+        "Authorization": "Bearer ${GITHUB_TOKEN}"
+      },
+      "type": "http",
+      "url": "https://api.githubcopilot.com/mcp/"
+    }
+  }
+}

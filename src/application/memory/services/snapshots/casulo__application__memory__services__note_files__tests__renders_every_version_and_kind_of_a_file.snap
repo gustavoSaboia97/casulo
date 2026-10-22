@@ -1,0 +1,26 @@
+---
+source: crates/casulo-memory/src/services/note_files.rs
+expression: rendered
+---
++++
+path = "src/adapters/docker.rs"
++++
+
+## purpose @ 9f3c1e0
+<!-- note: 3 author: writer reinforced: 0 -->
+**Runs containers through the docker binary**
+
+## convention @ 9f3c1e0
+<!-- note: 1 author: harness:codex reinforced: 0 -->
+**Every container runs read-only**
+`docker run` always gets `--read-only`.
+Only `/workspace` is writable.
+See: [[src/services/run.rs]]
+
+## convention @ 41ab2d8
+<!-- note: 2 author: harness:claude reinforced: 0 -->
+**Feature-x adds a cache volume**
+
+### conflict
+**Feature-x writes to the workspace only**
+Nothing else.

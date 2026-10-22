@@ -1,0 +1,17 @@
+---
+source: tests/regression.rs
+expression: sandbox.run(&arguments)
+---
+exit code: 0
+--- stdout
+Serve the memory to agents over MCP
+
+Usage: casulo memory serve [OPTIONS] --dir <DIR> --workspace <WORKSPACE>
+
+Options:
+      --dir <DIR>              The memory directory, holding memory.sqlite and notes/
+      --workspace <WORKSPACE>  The repository to index
+      --host <HOST>            Address to listen on; the memory container uses 0.0.0.0 on its internal network [default: 127.0.0.1]
+      --port <PORT>            Port to listen on [default: 7373]
+  -h, --help                   Print help
+--- stderr

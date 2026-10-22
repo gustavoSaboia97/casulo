@@ -1,0 +1,23 @@
+---
+source: tests/regression.rs
+expression: output
+---
+$ casulo run --dry-run
+exit code: 0
+--- stdout
+casulo-test-missing-runtime network create --internal casulo-memory-demo
+casulo-test-missing-runtime run --rm --detach --init --name=casulo-memory-demo --cap-drop=ALL --security-opt=no-new-privileges --pids-limit=1024 --read-only --pull=never --tmpfs=/tmp:rw,exec,nosuid,nodev,size=1g,mode=1777 --tmpfs=/home/casulo:rw,exec,nosuid,nodev,size=1g,uid=[UID],gid=[GID],mode=0700 --mount=type=bind,source=[HOME]/projects/demo/workspace,target=/workspace,readonly --mount=type=bind,source=[HOME]/projects/demo/memory,target=/memory --workdir=/workspace --network=casulo-memory-demo --network-alias=memory --user=[UID]:[GID] --env=HOME=/home/casulo --env=GIT_CONFIG_COUNT=1 --env=GIT_CONFIG_KEY_0=safe.directory --env=GIT_CONFIG_VALUE_0=/workspace --env=GIT_OPTIONAL_LOCKS=0 casulo/memory:dev casulo memory serve --dir /memory --workspace /workspace --host 0.0.0.0 --port 7373
+ANTHROPIC_API_KEY=*** casulo-test-missing-runtime create --rm --interactive --name=casulo-demo-claude-[PID] --cap-drop=ALL --security-opt=no-new-privileges --pids-limit=1024 --read-only --pull=never --tmpfs=/tmp:rw,exec,nosuid,nodev,size=1g,mode=1777 --tmpfs=/home/casulo:rw,exec,nosuid,nodev,size=1g,uid=[UID],gid=[GID],mode=0700 --mount=type=bind,source=[HOME]/projects/demo/workspace,target=/workspace --mount=type=bind,source=[HOME]/projects/demo/config/claude,target=/home/casulo/.claude --mount=type=bind,source=[HOME]/projects/demo/generated/claude/mcp.json,target=/home/casulo/.casulo/mcp.json,readonly --mount=type=bind,source=[HOME]/projects/demo/generated/claude/settings.json,target=/home/casulo/.casulo/settings.json,readonly --mount=type=bind,source=[HOME]/projects/demo/generated/claude/memory-hook.mjs,target=/home/casulo/.casulo/memory-hook.mjs,readonly --workdir=/workspace --user=[UID]:[GID] --env=HOME=/home/casulo --env=CLAUDE_CONFIG_DIR=/home/casulo/.claude --env=ANTHROPIC_API_KEY --env=CLAUDE_CODE_OAUTH_TOKEN --env=CASULO_SESSION=[PID] casulo/demo:claude claude --mcp-config /home/casulo/.casulo/mcp.json --settings /home/casulo/.casulo/settings.json
+ANTHROPIC_API_KEY=*** casulo-test-missing-runtime network connect casulo-memory-demo casulo-demo-claude-[PID]
+ANTHROPIC_API_KEY=*** casulo-test-missing-runtime start --attach --interactive casulo-demo-claude-[PID]
+--- stderr
+
+$ casulo shell --dry-run
+exit code: 0
+--- stdout
+casulo-test-missing-runtime network create --internal casulo-memory-demo
+casulo-test-missing-runtime run --rm --detach --init --name=casulo-memory-demo --cap-drop=ALL --security-opt=no-new-privileges --pids-limit=1024 --read-only --pull=never --tmpfs=/tmp:rw,exec,nosuid,nodev,size=1g,mode=1777 --tmpfs=/home/casulo:rw,exec,nosuid,nodev,size=1g,uid=[UID],gid=[GID],mode=0700 --mount=type=bind,source=[HOME]/projects/demo/workspace,target=/workspace,readonly --mount=type=bind,source=[HOME]/projects/demo/memory,target=/memory --workdir=/workspace --network=casulo-memory-demo --network-alias=memory --user=[UID]:[GID] --env=HOME=/home/casulo --env=GIT_CONFIG_COUNT=1 --env=GIT_CONFIG_KEY_0=safe.directory --env=GIT_CONFIG_VALUE_0=/workspace --env=GIT_OPTIONAL_LOCKS=0 casulo/memory:dev casulo memory serve --dir /memory --workspace /workspace --host 0.0.0.0 --port 7373
+ANTHROPIC_API_KEY=*** casulo-test-missing-runtime create --rm --interactive --name=casulo-demo-claude-[PID] --cap-drop=ALL --security-opt=no-new-privileges --pids-limit=1024 --read-only --pull=never --tmpfs=/tmp:rw,exec,nosuid,nodev,size=1g,mode=1777 --tmpfs=/home/casulo:rw,exec,nosuid,nodev,size=1g,uid=[UID],gid=[GID],mode=0700 --mount=type=bind,source=[HOME]/projects/demo/workspace,target=/workspace --mount=type=bind,source=[HOME]/projects/demo/config/claude,target=/home/casulo/.claude --mount=type=bind,source=[HOME]/projects/demo/generated/claude/mcp.json,target=/home/casulo/.casulo/mcp.json,readonly --mount=type=bind,source=[HOME]/projects/demo/generated/claude/settings.json,target=/home/casulo/.casulo/settings.json,readonly --mount=type=bind,source=[HOME]/projects/demo/generated/claude/memory-hook.mjs,target=/home/casulo/.casulo/memory-hook.mjs,readonly --workdir=/workspace --user=[UID]:[GID] --env=HOME=/home/casulo --env=CLAUDE_CONFIG_DIR=/home/casulo/.claude --env=ANTHROPIC_API_KEY --env=CLAUDE_CODE_OAUTH_TOKEN --env=CASULO_SESSION=[PID] casulo/demo:claude bash
+ANTHROPIC_API_KEY=*** casulo-test-missing-runtime network connect casulo-memory-demo casulo-demo-claude-[PID]
+ANTHROPIC_API_KEY=*** casulo-test-missing-runtime start --attach --interactive casulo-demo-claude-[PID]
+--- stderr

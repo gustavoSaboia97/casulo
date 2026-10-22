@@ -1,0 +1,25 @@
+# A new feature, from request to a reviewed, documented branch.
+description = "Take a feature from request to a reviewed, documented branch"
+
+[[step]]
+agent = "analyst"
+approve = true          # the user answers the open questions
+
+[[step]]
+agent = "planner"
+approve = true          # the user approves the plan
+
+[[step]]
+agent = "implementer"
+
+[[step]]
+agent = "reviewer"
+depends_on = ["implementer"]
+
+[[step]]
+agent = "security-auditor"
+depends_on = ["implementer"]
+
+[[step]]
+agent = "documenter"
+depends_on = ["reviewer", "security-auditor"]

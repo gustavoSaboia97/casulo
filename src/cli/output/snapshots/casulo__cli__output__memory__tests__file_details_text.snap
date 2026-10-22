@@ -1,0 +1,13 @@
+---
+source: src/cli/memory.rs
+expression: format_file_details(&details)
+---
+src/main.rs
+  content  9f3c1e0
+links to
+  contains  src/cli.rs
+  imports   src/domain/config.rs
+linked from
+  (none)
+notes
+  purpose    stale        harness:claude Composition root: builds the adapters

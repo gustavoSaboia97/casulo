@@ -1,0 +1,92 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  # The Release workflow runs these checks before it builds a release.
+  workflow_call:
+
+# The workflow only reads the code; nothing in it needs write access.
+permissions:
+  contents: read
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  check:
+    name: check (${{ matrix.os }})
+    strategy:
+      # Report every platform even when one of them fails.
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+      - uses: Swatinem/rust-cache@v2
+      # A version bump needs its release notes, or the Release workflow fails
+      # after the merge; this catches it in the pull request.
+      - name: Release notes for the version
+        if: matrix.os == 'ubuntu-latest'
+        shell: bash
+        run: |
+          version="$(cargo pkgid --package casulo | sed 's/.*[#@]//')"
+          test -f "docs/releases/${version}.md" || {
+            echo "::error::Cargo.toml has version ${version}, but docs/releases/${version}.md is missing; write the release notes (see Releases in AGENTS.md)"
+            exit 1
+          }
+      - run: cargo fmt --check
+      - run: cargo clippy --workspace --all-targets -- -D warnings
+      - run: cargo test --workspace
+
+  # The prek hooks of .pre-commit-config.yaml and the commit rule of
+  # `cargo xtask`, for every pull request: the agents commit in the casulo
+  # container, where the hooks never run.
+  hooks:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          # Every commit of the pull request, to check their messages.
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - uses: j178/prek-action@v3
+        with:
+          prek-version: "0.5.5"
+          install-only: true
+          cache: false
+      # The check job already runs the cargo hooks, on three systems.
+      - name: File checks
+        run: prek run --all-files --show-diff-on-failure --skip cargo-fmt --skip cargo-clippy --skip cargo-test
+      # Merges are left out: git writes their message.
+      - name: Commit messages
+        env:
+          BASE: ${{ github.event.pull_request.base.sha }}
+          HEAD: ${{ github.event.pull_request.head.sha }}
+        run: |
+          failed=0
+          for commit in $(git rev-list --no-merges "$BASE..$HEAD"); do
+            git log -1 --format=%B "$commit" > "$RUNNER_TEMP/message.txt"
+            if ! cargo xtask commit-msg "$RUNNER_TEMP/message.txt"; then
+              echo "breaks the commit rule: $(git log -1 --format='%h %s' "$commit")"
+              failed=1
+            fi
+          done
+          exit "$failed"
+      # A squash merge turns the title into the commit on main. The title
+      # comes in through env, never inside the script: anyone opening a pull
+      # request writes it, and ${{ }} in a script would run it as shell.
+      - name: Pull request title
+        env:
+          TITLE: ${{ github.event.pull_request.title }}
+        run: cargo xtask pr-title "$TITLE"

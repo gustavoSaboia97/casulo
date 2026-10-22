@@ -1,0 +1,14 @@
+---
+source: tests/regression.rs
+expression: sandbox.run(&arguments)
+---
+exit code: 0
+--- stdout
+Read what changed in the checkout and the local branches into memory
+
+Usage: casulo index memory [OPTIONS]
+
+Options:
+      --project <PROJECT>  Project to use [default: the project of the current directory]
+  -h, --help               Print help
+--- stderr

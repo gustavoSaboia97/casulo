@@ -1,0 +1,12 @@
+---
+source: tests/regression.rs
+expression: "sandbox.run_in(&workspace, &[\"run\", \"--dry-run\"], &[])"
+---
+exit code: 1
+--- stdout
+--- stderr
+error: invalid configuration in [HOME]/projects/demo/casulo.toml: TOML parse error at line 2, column 1
+  |
+2 | harnes = "codex"
+  | ^^^^^^
+unknown field `harnes`, expected one of `repository`, `workspace`, `harness`, `mask`, `models`, `git`, `compose`, `memory`, `image`

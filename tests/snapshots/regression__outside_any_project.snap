@@ -1,0 +1,8 @@
+---
+source: tests/regression.rs
+expression: "sandbox.run_in(sandbox.outside(), &[\"run\", \"--dry-run\"], &[])"
+---
+exit code: 1
+--- stdout
+--- stderr
+error: not inside a casulo project; run this from a project's workspace or pass --project <name>

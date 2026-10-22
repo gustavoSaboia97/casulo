@@ -1,0 +1,41 @@
+# Claude Code, by Anthropic: https://code.claude.com/docs/en/setup
+name = "claude"
+
+# Installed with npm into the image, so the binary lives outside the user
+# home, which is a temporary directory when the container runs.
+install = ["npm install -g @anthropic-ai/claude-code"]
+
+command = ["claude"]
+
+# Login, settings and history, relative to the user home in the container.
+# casulo keeps this directory in projects/<name>/config/claude/ between
+# runs; the rest of the home starts empty every time. CLAUDE_CONFIG_DIR
+# makes Claude Code keep .claude.json in it too, instead of next to it.
+config_dir = ".claude"
+config_env = "CLAUDE_CONFIG_DIR"
+
+# Passed by name only when set on the host. CLAUDE_CODE_OAUTH_TOKEN is a
+# subscription login made once with `claude setup-token`, so every project
+# starts logged in.
+auth_env = ["ANTHROPIC_API_KEY", "CLAUDE_CODE_OAUTH_TOKEN"]
+
+# Written into the config directory when missing, so a new project skips
+# Claude Code's first-run setup and does not ask whether to trust /workspace.
+# A config directory in use is never changed.
+config_files = { ".claude.json" = '{"hasCompletedOnboarding": true, "projects": {"/workspace": {"hasTrustDialogAccepted": true}}}' }
+
+instructions_file = "CLAUDE.md"
+
+# Session model and reasoning effort, from [harness.claude] in casulo.toml.
+model_args = ["--model", "{model}"]
+effort_args = ["--effort", "{effort}"]
+
+# Where your setup from ~/.casulo/agent goes, relative to the container home.
+[inject]
+instructions = ".claude/CLAUDE.md"
+skills = ".claude/skills"
+agents = { dir = ".claude/agents", format = "claude-markdown" }
+mcp = "claude-mcp-config"
+# Session hooks, such as memory's reminder to save notes, go in a settings
+# file passed with --settings, on top of your own settings.
+hooks = "claude-settings"

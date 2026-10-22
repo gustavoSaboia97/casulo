@@ -1,0 +1,17 @@
+---
+source: tests/regression.rs
+expression: sandbox.run(&arguments)
+---
+exit code: 0
+--- stdout
+An Agent Skill, or one of its files with --file
+
+Usage: casulo edit skill [OPTIONS] <NAME>
+
+Arguments:
+  <NAME>  Its name, such as release-notes
+
+Options:
+      --file <FILE>  A file inside the skill's folder instead of SKILL.md, such as assets/template.md
+  -h, --help         Print help
+--- stderr

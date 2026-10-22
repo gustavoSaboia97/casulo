@@ -1,0 +1,183 @@
+name: Release
+
+# Every push to main releases the version in Cargo.toml once. When tag
+# v<version> already exists, nothing happens. When it does not, the quality
+# checks run, the binaries are built, and the last job creates the tag and a
+# GitHub release with docs/releases/<version>.md as its notes; a new version
+# without notes fails. The release job creates the tag itself, after every
+# build passed, because a tag pushed with GITHUB_TOKEN would not start another
+# workflow, and a failed build then leaves no tag that blocks a retry.
+#
+# The static Linux binaries come first: the memory image of every other
+# binary downloads them, checked against SHA-256 sums embedded at build time.
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+# A second push waits for the first run, then sees the tag it created.
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  plan:
+    name: decide whether a release is due
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.decide.outputs.version }}
+      publish: ${{ steps.decide.outputs.publish }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Compare the version with the tags
+        id: decide
+        shell: bash
+        run: |
+          version="$(cargo pkgid --package casulo | sed 's/.*[#@]//')"
+          echo "version=${version}" >> "$GITHUB_OUTPUT"
+          # --exit-code: 0 when the tag exists, 2 when it does not, anything
+          # else when origin cannot be read.
+          status=0
+          git ls-remote --exit-code --tags origin "refs/tags/v${version}" > /dev/null || status=$?
+          case "${status}" in
+            0)
+              echo "v${version} is already tagged; nothing to release"
+              echo "publish=false" >> "$GITHUB_OUTPUT"
+              ;;
+            2)
+              if [ -f "docs/releases/${version}.md" ]; then
+                echo "v${version} is not tagged yet; releasing it with docs/releases/${version}.md"
+                echo "publish=true" >> "$GITHUB_OUTPUT"
+              else
+                echo "::error::Cargo.toml has version ${version}, which has no tag v${version} and no docs/releases/${version}.md; add the release notes to publish it"
+                exit 1
+              fi
+              ;;
+            *)
+              echo "::error::cannot list the tags of origin"
+              exit 1
+              ;;
+          esac
+
+  # The same checks as every pull request, on three systems, before anything
+  # is built for a release.
+  checks:
+    needs: plan
+    if: needs.plan.outputs.publish == 'true'
+    uses: ./.github/workflows/ci.yml
+
+  linux-static:
+    name: static Linux binary (${{ matrix.target }})
+    needs: [plan, checks]
+    if: needs.plan.outputs.publish == 'true'
+    strategy:
+      matrix:
+        target: [x86_64-unknown-linux-musl, aarch64-unknown-linux-musl]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: taiki-e/install-action@v2
+        with:
+          tool: cross
+      - run: cross build --release --locked --target ${{ matrix.target }} --bin casulo
+      - name: Package
+        shell: bash
+        run: |
+          mkdir dist
+          cp "target/${{ matrix.target }}/release/casulo" "dist/casulo-${{ matrix.target }}"
+          cd dist && sha256sum "casulo-${{ matrix.target }}" > "casulo-${{ matrix.target }}.sha256"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: casulo-${{ matrix.target }}
+          path: dist/*
+
+  host:
+    name: binary (${{ matrix.target }})
+    # `needs` lists plan too: a job can read only the outputs of the jobs it needs.
+    needs: [plan, linux-static]
+    if: needs.plan.outputs.publish == 'true'
+    strategy:
+      matrix:
+        include:
+          - { os: ubuntu-latest, target: x86_64-unknown-linux-gnu, binary: casulo }
+          - { os: macos-latest, target: aarch64-apple-darwin, binary: casulo }
+          - { os: macos-latest, target: x86_64-apple-darwin, binary: casulo }
+          - { os: windows-latest, target: x86_64-pc-windows-msvc, binary: casulo.exe }
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: casulo-*-linux-musl
+          path: static
+          merge-multiple: true
+      - name: Embed the checksums of the static Linux binaries
+        shell: bash
+        run: |
+          echo "CASULO_MEMORY_SHA256_X86_64=$(cut -d ' ' -f 1 static/casulo-x86_64-unknown-linux-musl.sha256)" >> "$GITHUB_ENV"
+          echo "CASULO_MEMORY_SHA256_AARCH64=$(cut -d ' ' -f 1 static/casulo-aarch64-unknown-linux-musl.sha256)" >> "$GITHUB_ENV"
+      - run: cargo build --release --locked --target ${{ matrix.target }} --bin casulo
+      - name: Package
+        shell: bash
+        run: |
+          mkdir dist
+          name="casulo-${{ matrix.target }}"
+          if [ "${{ matrix.binary }}" = "casulo.exe" ]; then name="${name}.exe"; fi
+          cp "target/${{ matrix.target }}/release/${{ matrix.binary }}" "dist/${name}"
+          cd dist
+          # macOS has shasum, not sha256sum. The line is written by hand so
+          # every .sha256 has the same "<hash>  <name>" form on every system.
+          if [ "${RUNNER_OS}" = "macOS" ]; then
+            hash="$(shasum -a 256 "${name}" | cut -d ' ' -f 1)"
+          else
+            hash="$(sha256sum "${name}" | cut -d ' ' -f 1)"
+          fi
+          printf '%s  %s\n' "${hash}" "${name}" > "${name}.sha256"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: casulo-${{ matrix.target }}
+          path: dist/*
+
+  release:
+    needs: [plan, linux-static, host]
+    if: needs.plan.outputs.publish == 'true'
+    runs-on: ubuntu-latest
+    # Only this job writes: it creates the tag and the release.
+    permissions:
+      contents: write
+    steps:
+      # For the release notes.
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+      # The values come in through env, never inside the script.
+      - name: Tag and create the release
+        env:
+          VERSION: ${{ needs.plan.outputs.version }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "v${VERSION}" dist/* \
+            --repo "${GITHUB_REPOSITORY}" \
+            --target "${GITHUB_SHA}" \
+            --title "casulo ${VERSION}" \
+            --notes-file "docs/releases/${VERSION}.md"

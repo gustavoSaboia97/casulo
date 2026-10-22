@@ -1,0 +1,13 @@
+---
+source: tests/regression.rs
+expression: sandbox.run(&arguments)
+---
+exit code: 0
+--- stdout
+List the available harnesses, where each one comes from and what it receives
+
+Usage: casulo harness list
+
+Options:
+  -h, --help  Print help
+--- stderr

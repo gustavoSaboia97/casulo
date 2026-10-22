@@ -1,0 +1,16 @@
+---
+source: tests/regression.rs
+expression: sandbox.run(&arguments)
+---
+exit code: 0
+--- stdout
+Run the agent in a hardened container with the workspace mounted
+
+Usage: casulo run [OPTIONS]
+
+Options:
+      --project <PROJECT>  Project to use [default: the project of the current directory]
+      --harness <HARNESS>  Harness to use [default: the project's, else the global default]
+      --dry-run            Print the exact container command instead of running it
+  -h, --help               Print help
+--- stderr

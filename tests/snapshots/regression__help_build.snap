@@ -1,0 +1,15 @@
+---
+source: tests/regression.rs
+expression: sandbox.run(&arguments)
+---
+exit code: 0
+--- stdout
+Generate the project's Dockerfile for a harness and build the image
+
+Usage: casulo build [OPTIONS]
+
+Options:
+      --project <PROJECT>  Project to use [default: the project of the current directory]
+      --harness <HARNESS>  Harness to use [default: the project's, else the global default]
+  -h, --help               Print help
+--- stderr

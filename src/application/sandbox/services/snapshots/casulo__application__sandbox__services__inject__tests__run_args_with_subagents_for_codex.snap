@@ -1,0 +1,24 @@
+---
+source: src/services/inject.rs
+expression: "run_args(&home, &harness, mounts)"
+---
+run
+--rm
+--interactive
+--tty
+--cap-drop=ALL
+--security-opt=no-new-privileges
+--pids-limit=1024
+--read-only
+--pull=never
+--tmpfs=/tmp:rw,exec,nosuid,nodev,size=1g,mode=1777
+--tmpfs=/home/casulo:rw,exec,nosuid,nodev,size=1g,uid=1000,gid=1000,mode=0700
+--mount=type=bind,source=~/.casulo/projects/demo/workspace,target=/workspace
+--mount=type=bind,source=~/.casulo/projects/demo/generated/codex/agents,target=/home/casulo/.codex/agents,readonly
+--workdir=/workspace
+--env=HOME=/home/casulo
+--env=CODEX_HOME=/home/casulo/.codex
+--env=OPENAI_API_KEY
+--env=CODEX_API_KEY
+casulo/demo:codex
+codex

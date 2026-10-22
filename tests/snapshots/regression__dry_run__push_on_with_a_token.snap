@@ -1,0 +1,18 @@
+---
+source: tests/regression.rs
+expression: output
+---
+$ casulo run --dry-run
+exit code: 0
+--- stdout
+CASULO_GIT_TOKEN=*** casulo-test-missing-runtime run --rm --interactive --cap-drop=ALL --security-opt=no-new-privileges --pids-limit=1024 --read-only --pull=never --tmpfs=/tmp:rw,exec,nosuid,nodev,size=1g,mode=1777 --tmpfs=/home/casulo:rw,exec,nosuid,nodev,size=1g,uid=[UID],gid=[GID],mode=0700 --mount=type=bind,source=[HOME]/projects/demo/workspace,target=/workspace --mount=type=bind,source=[HOME]/projects/demo/config/claude,target=/home/casulo/.claude --mount=type=bind,source=[HOME]/projects/demo/push,target=/etc/casulo,readonly --workdir=/workspace --user=[UID]:[GID] --env=HOME=/home/casulo --env=GIT_AUTHOR_NAME=Ada --env=GIT_COMMITTER_NAME=Ada --env=GIT_AUTHOR_EMAIL=ada@example.com --env=GIT_COMMITTER_EMAIL=ada@example.com --env=GIT_CONFIG_COUNT=2 --env=GIT_CONFIG_KEY_0=user.name --env=GIT_CONFIG_VALUE_0=Ada --env=GIT_CONFIG_KEY_1=user.email --env=GIT_CONFIG_VALUE_1=ada@example.com --env=CLAUDE_CONFIG_DIR=/home/casulo/.claude --env=ANTHROPIC_API_KEY --env=CLAUDE_CODE_OAUTH_TOKEN --env=CASULO_GIT_TOKEN casulo/demo:claude claude
+--- stderr
+warning: [HOME]/projects/demo/casulo.toml holds secrets and other users of this machine can read it; run `chmod 600 [HOME]/projects/demo/casulo.toml`
+warning: push is enabled: the agent can push with your token. protected_branches only stops mistakes; to really protect main, release/*, add a branch protection rule on the server: https://docs.github.com/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets
+
+$ casulo shell --dry-run
+exit code: 0
+--- stdout
+CASULO_GIT_TOKEN=*** casulo-test-missing-runtime run --rm --interactive --cap-drop=ALL --security-opt=no-new-privileges --pids-limit=1024 --read-only --pull=never --tmpfs=/tmp:rw,exec,nosuid,nodev,size=1g,mode=1777 --tmpfs=/home/casulo:rw,exec,nosuid,nodev,size=1g,uid=[UID],gid=[GID],mode=0700 --mount=type=bind,source=[HOME]/projects/demo/workspace,target=/workspace --mount=type=bind,source=[HOME]/projects/demo/config/claude,target=/home/casulo/.claude --mount=type=bind,source=[HOME]/projects/demo/push,target=/etc/casulo,readonly --workdir=/workspace --user=[UID]:[GID] --env=HOME=/home/casulo --env=GIT_AUTHOR_NAME=Ada --env=GIT_COMMITTER_NAME=Ada --env=GIT_AUTHOR_EMAIL=ada@example.com --env=GIT_COMMITTER_EMAIL=ada@example.com --env=GIT_CONFIG_COUNT=2 --env=GIT_CONFIG_KEY_0=user.name --env=GIT_CONFIG_VALUE_0=Ada --env=GIT_CONFIG_KEY_1=user.email --env=GIT_CONFIG_VALUE_1=ada@example.com --env=CLAUDE_CONFIG_DIR=/home/casulo/.claude --env=ANTHROPIC_API_KEY --env=CLAUDE_CODE_OAUTH_TOKEN --env=CASULO_GIT_TOKEN casulo/demo:claude bash
+--- stderr
+warning: [HOME]/projects/demo/casulo.toml holds secrets and other users of this machine can read it; run `chmod 600 [HOME]/projects/demo/casulo.toml`

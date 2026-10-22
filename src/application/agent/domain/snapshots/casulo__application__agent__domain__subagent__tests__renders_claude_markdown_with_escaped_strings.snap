@@ -1,0 +1,12 @@
+---
+source: src/domain/subagent.rs
+expression: text
+---
+---
+name: "tricky"
+description: "Says \"hi\" \\ and\nspans: lines"
+---
+
+Line one.
+
+Line "two".

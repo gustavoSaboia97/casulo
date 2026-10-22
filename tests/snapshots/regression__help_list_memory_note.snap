@@ -1,0 +1,17 @@
+---
+source: tests/regression.rs
+expression: sandbox.run(&arguments)
+---
+exit code: 0
+--- stdout
+One line per file and kind: path, kind, status, author, summary
+
+Usage: casulo list memory note [OPTIONS]
+
+Options:
+      --project <PROJECT>  Project to use [default: the project of the current directory]
+      --stale              Only notes written for another version of the file
+      --conflict           Only notes with two texts to settle
+      --all-versions       Every stored version, including notes kept for other branches
+  -h, --help               Print help
+--- stderr

@@ -1,0 +1,20 @@
+---
+source: tests/regression.rs
+expression: sandbox.run(&arguments)
+---
+exit code: 0
+--- stdout
+Work with the services of the project's docker compose file
+
+Usage: casulo compose <COMMAND>
+
+Commands:
+  check  Check the compose file and show what would run, without starting anything
+  up     Check, approve and start the services in the background
+  down   Stop and remove the services (named volumes are kept)
+  ps     Show the state of the services
+  help   Print this message or the help of the given subcommand(s)
+
+Options:
+  -h, --help  Print help
+--- stderr

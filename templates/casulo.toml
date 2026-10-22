@@ -1,0 +1,70 @@
+# casulo global settings.
+#
+# Every option is listed with its default value, commented out. To change
+# one, remove the "# " in front of it and edit the value. `casulo config`
+# opens this file and checks it when you close the editor.
+
+# Name or path of the container runtime binary.
+# runtime = "{default_runtime}"
+
+# Agent used when neither --harness nor the project chooses one.
+# `casulo harness list` shows the available agents.
+# default_harness = "{default_harness}"
+
+# Editor for `casulo config`. Split on spaces, so "code --wait" works.
+# CASULO_EDITOR overrides it. When neither is set, casulo uses VISUAL, then
+# EDITOR, then vi (notepad on Windows).
+# editor = "vi"
+
+# [git]
+# Identity of the commits the agent makes. Not set by default.
+# name = "Your Name"
+# email = "you@example.com"
+#
+# Let the agent push from the container, over HTTPS only. Off by default:
+# pushing stays on your machine, with your own credentials.
+#
+# WARNING: with push on, the agent holds a token that can write to the
+# repository. Use a token limited to this repository. protected_branches
+# only stops mistakes: an agent can bypass it (git push --no-verify). To
+# really protect main, add a branch protection rule on the server, for
+# GitHub:
+# https://docs.github.com/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets
+# push = false
+# The token the agent pushes with. casulo creates this file readable only
+# by you. CASULO_GIT_TOKEN exported in your shell wins over it.
+# token = "github_pat_..."
+# The only host git sends the token to. SSH URLs of this host, such as
+# git@github.com:you/app.git, are rewritten to HTTPS in the container only,
+# so your own remote can stay on SSH. Defaults to the host of the project's
+# repository; a project created from a directory gets it from its remote.
+# host = "github.com"
+# Branches the pre-push hook refuses pushes to; globs allowed. Protect them
+# on the server too, as the WARNING above says.
+# protected_branches = ["main", "master"]
+
+# Model and reasoning effort of the agent session, for each harness. Names
+# are passed through as written. Not set by default, so each agent uses its
+# own default. A project can override them with [models.<harness>].
+# [harness.claude]
+# model = "opus"
+# effort = "high"
+
+# [harness.codex]
+# model = "gpt-5-codex"
+# effort = "medium"
+
+# Give agents a memory of this project's code, shared by every harness: a
+# code graph, search, and notes agents write about what the code does not
+# say. casulo run starts a memory server in its own container, on a network
+# with no internet; agents reach it over MCP and never see its files.
+# [memory]
+# enabled = false
+
+# Values for the agent's secret variables, such as the token from
+# `claude setup-token`, so you do not have to export them in your shell. A
+# variable set in the shell wins over this table. They are stored here in
+# plain text: casulo creates this file readable only by you, and warns when
+# other users can read it.
+# [secrets]
+# CLAUDE_CODE_OAUTH_TOKEN = "sk-ant-oat01-..."

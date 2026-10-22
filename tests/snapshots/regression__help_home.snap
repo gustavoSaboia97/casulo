@@ -1,0 +1,13 @@
+---
+source: tests/regression.rs
+expression: sandbox.run(&arguments)
+---
+exit code: 0
+--- stdout
+Print the casulo home directory
+
+Usage: casulo home
+
+Options:
+  -h, --help  Print help
+--- stderr

@@ -1,0 +1,21 @@
+---
+source: tests/regression.rs
+expression: sandbox.run(&arguments)
+---
+exit code: 0
+--- stdout
+Change a subagent, skill, MCP server or workflow in your editor
+
+Usage: casulo edit <COMMAND>
+
+Commands:
+  agent     A subagent
+  skill     An Agent Skill, or one of its files with --file
+  mcp       An MCP server
+  workflow  A workflow of subagents; saving it writes its skill
+  memory    Notes in the project's memory
+  help      Print this message or the help of the given subcommand(s)
+
+Options:
+  -h, --help  Print help
+--- stderr

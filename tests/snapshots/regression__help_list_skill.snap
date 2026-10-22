@@ -1,0 +1,13 @@
+---
+source: tests/regression.rs
+expression: sandbox.run(&arguments)
+---
+exit code: 0
+--- stdout
+Agent Skills, with their descriptions
+
+Usage: casulo list skill
+
+Options:
+  -h, --help  Print help
+--- stderr

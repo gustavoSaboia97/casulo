@@ -1,0 +1,16 @@
+---
+source: src/domain/mcp_server.rs
+expression: "arguments.join(\"\\n\")"
+---
+-c
+mcp_servers.context7.command="npx"
+-c
+mcp_servers.context7.args=["-y", "@upstash/context7-mcp"]
+-c
+mcp_servers.context7.env_vars=["CONTEXT7_TOKEN"]
+-c
+mcp_servers.github.url="https://api.githubcopilot.com/mcp/"
+-c
+mcp_servers.github.bearer_token_env_var="GITHUB_TOKEN"
+-c
+mcp_servers.docs.url="http://localhost:3000/mcp"

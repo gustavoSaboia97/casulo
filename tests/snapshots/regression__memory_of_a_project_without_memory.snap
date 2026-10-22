@@ -1,0 +1,9 @@
+---
+source: tests/regression.rs
+expression: "sandbox.run(&[\"describe\", \"memory\", \"--project\", \"demo\"])"
+---
+exit code: 0
+--- stdout
+project        demo
+memory         not created yet
+--- stderr

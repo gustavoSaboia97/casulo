@@ -1,0 +1,24 @@
+---
+source: src/services/inject.rs
+expression: "run_args(&home, &harness, mounts)"
+---
+run
+--rm
+--interactive
+--tty
+--cap-drop=ALL
+--security-opt=no-new-privileges
+--pids-limit=1024
+--read-only
+--pull=never
+--tmpfs=/tmp:rw,exec,nosuid,nodev,size=1g,mode=1777
+--tmpfs=/home/casulo:rw,exec,nosuid,nodev,size=1g,uid=1000,gid=1000,mode=0700
+--mount=type=bind,source=~/.casulo/projects/demo/workspace,target=/workspace
+--mount=type=bind,source=~/.casulo/projects/demo/generated/claude/agents,target=/home/casulo/.claude/agents,readonly
+--workdir=/workspace
+--env=HOME=/home/casulo
+--env=CLAUDE_CONFIG_DIR=/home/casulo/.claude
+--env=ANTHROPIC_API_KEY
+--env=CLAUDE_CODE_OAUTH_TOKEN
+casulo/demo:claude
+claude

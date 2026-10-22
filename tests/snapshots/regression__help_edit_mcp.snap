@@ -1,0 +1,16 @@
+---
+source: tests/regression.rs
+expression: sandbox.run(&arguments)
+---
+exit code: 0
+--- stdout
+An MCP server
+
+Usage: casulo edit mcp <NAME>
+
+Arguments:
+  <NAME>  Its name, such as code-reviewer
+
+Options:
+  -h, --help  Print help
+--- stderr

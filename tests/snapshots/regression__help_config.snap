@@ -1,0 +1,15 @@
+---
+source: tests/regression.rs
+expression: sandbox.run(&arguments)
+---
+exit code: 0
+--- stdout
+Open the global casulo.toml, or a project's, in your editor
+
+Usage: casulo config [OPTIONS]
+
+Options:
+      --project <PROJECT>  Open this project's casulo.toml instead of the global one
+      --path               Only print the file's path
+  -h, --help               Print help
+--- stderr

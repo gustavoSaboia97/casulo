@@ -1,0 +1,44 @@
+[package]
+name = "casulo"
+version = "0.1.0"
+authors = ["Gustavo Saboia"]
+edition = "2024"
+description = "Run any AI coding agent in a hardened, disposable container, with your project mounted where you can see every change."
+readme = "README.md"
+repository = "https://github.com/gustavoSaboia97/casulo"
+license = "GPL-3.0-only"
+keywords = ["ai", "agent", "sandbox", "docker", "container"]
+categories = ["command-line-utilities", "development-tools"]
+
+[dependencies]
+anyhow = "1"
+clap = { version = "4", features = ["derive"] }
+# `bundled` compiles SQLite in, so Windows needs no system SQLite.
+rusqlite = { version = "0.40", features = ["bundled"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+toml = "1"
+tree-sitter = "0.27.1"
+tree-sitter-rust = "0.24.2"
+
+[dev-dependencies]
+assert_cmd = "2"
+insta = "1"
+predicates = "3"
+tempfile = "3"
+
+[lints]
+workspace = true
+
+# `xtask/` holds the checks for this repository itself (`cargo xtask`); it is
+# not part of casulo. Commands run here reach it only with `--workspace`.
+[workspace]
+members = ["xtask"]
+
+[workspace.lints.rust]
+unsafe_code = "forbid"
+
+[workspace.lints.clippy]
+dbg_macro = "warn"
+todo = "warn"
+unwrap_used = "warn"

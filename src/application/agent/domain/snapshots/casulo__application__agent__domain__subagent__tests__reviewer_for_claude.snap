@@ -1,0 +1,11 @@
+---
+source: src/domain/subagent.rs
+expression: text
+---
+---
+name: "reviewer"
+description: "Reviews the diff for bugs and security problems"
+model: "haiku"
+---
+
+You are a code reviewer. Read the diff and report only real problems.
