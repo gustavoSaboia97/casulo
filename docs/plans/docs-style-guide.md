@@ -1,6 +1,6 @@
 # Plan: a writing style guide for the docs example skill
 
-**Status:** proposed.
+**Status:** done.
 
 ## Requirements
 
