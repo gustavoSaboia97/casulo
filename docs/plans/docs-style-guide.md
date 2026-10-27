@@ -97,7 +97,7 @@ The file follows its own rules: the reviewer reads it against them.
 No commit unless a check finds something.
 
 - `cargo fmt --check`, `cargo clippy --workspace --all-targets -- -D warnings`, `cargo test --workspace`.
-- `git diff --stat main` lists only the plan, `style.md`, `SKILL.md` and `docs/agent-setup.md`; `git diff --stat main -- '*.snap' src tests` is empty.
+- `git diff --stat main` lists only the plan, `style.md`, `SKILL.md`, `assets/spec.md` and `docs/agent-setup.md`; `git diff --stat main -- '*.snap' src tests` is empty.
 - Read `style.md` and the new `SKILL.md` lines once more against the acceptance criteria.
 - Set this plan's Status to `done` in the last commit of the pull request.
 

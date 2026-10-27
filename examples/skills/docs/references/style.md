@@ -40,8 +40,8 @@ decision records (ADRs), changelogs and code comments.
 - Lead with the point, then the details.
 - Give each paragraph one topic, and open it with a sentence that names it.
 - Start a page with what the reader can do there, not "This page shows…".
-- When a sentence lists more than about five items, or items that each need
-  explaining, make it a list.
+- When a sentence lists steps, or items that each need explaining, make it a
+  list.
 - Write list items in the same grammatical form.
 - Give each numbered step one action.
 
