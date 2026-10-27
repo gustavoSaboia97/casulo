@@ -171,7 +171,7 @@ cp examples/workflows/* ~/.casulo/agent/workflows/
 casulo edit workflow feature      # close it to write the skill workflow-feature
 ```
 
-A copied workflow has no skill yet, so open and close each one with `casulo edit workflow <name>` (`casulo run` warns until you do).
+A copied workflow has no skill yet, so open and close each one with `casulo edit workflow <name>` (`casulo run` warns until you do). To update one skill, copy its folder again (`cp -r examples/skills/docs ~/.casulo/agent/skills/`); this replaces your edits to it. Copy an agent or workflow file the same way, and reopen a workflow with `casulo edit workflow <name>`.
 
 ## What each agent receives
 

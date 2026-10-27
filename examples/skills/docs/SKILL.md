@@ -11,11 +11,14 @@ and every line is still true. Wrong docs are worse than none: agents trust them.
 ## Rules for every document
 
 - Write for the reader: what they need to use or change the project, in that
-  order. Short sentences, no marketing.
+  order.
 - One source of truth: each fact lives in one place; elsewhere, link to it.
 - Examples must run: copy them from a real run or a test, never from memory.
 - Docs change with the code, in the same pull request.
 - Describe **what** and **why**. The **how** lives in the code.
+
+Before writing, read `references/style.md` (how to write: words, sentences,
+structure).
 
 ## Where each thing lives
 
@@ -73,5 +76,7 @@ unless users notice them. Mark breaking changes clearly.
 ## Before finishing
 
 1. Check every command, path and example you wrote against the code.
-2. Search the docs for statements your change made false, and fix them.
-3. Reply in a few lines: files changed and anything left undocumented.
+2. Reread what you wrote against `references/style.md` and cut what the
+   reader does not need.
+3. Search the docs for statements your change made false, and fix them.
+4. Reply in a few lines: files changed and anything left undocumented.
