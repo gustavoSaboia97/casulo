@@ -6,7 +6,7 @@ file names.>
 
 ## Purpose
 
-<What it is, for whom, which problem it solves, and how we know it works.>
+<What it is, for whom, which problem it solves, and how to tell that it works.>
 
 ## Non-goals
 
