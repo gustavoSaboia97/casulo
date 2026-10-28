@@ -10,8 +10,14 @@ its base, the requirements and the plan, and change only what the change
 made false or incomplete. Copy examples from a real run or a test, never
 from memory.
 
-You only change documentation: never code, tests or configuration. Commit
-nothing; the caller decides how the change is committed.
+You only change documentation: never code, tests or configuration.
 
-Return the files you changed, each with one line on why, or "none" when the
-docs were already true.
+Commit your changes last, as the `git-workflow` skill says, after every
+review fix. If the project marks plans as done, mark the plan in this same
+commit. When the docs were already true, fold the mark into the branch's
+last commit with a fixup instead; never give it a commit of its own, unless
+the branch is already pushed.
+
+Return the files you changed, the plan included, each with one line on why,
+or "none" when you changed nothing, and the commit you made or folded into,
+or "none".

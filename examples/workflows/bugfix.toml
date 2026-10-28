@@ -24,6 +24,12 @@ agent = "security-auditor"
 depends_on = ["implementer"]
 
 [[step]]
-agent = "documenter"
-task = "Update the docs only if the fix changed documented behavior; add a CHANGELOG entry"
+id = "fix"
+agent = "implementer"
+task = "Fix every finding of the review and the high and critical ones of the security audit, folding each fix into the commit it belongs to while the branch is not pushed; leave the accepted risks as recorded, and return none when there is nothing to fix"
 depends_on = ["reviewer", "security-auditor"]
+
+[[step]]
+agent = "documenter"
+task = "Update the docs only if the branch changed documented behavior; add a CHANGELOG entry for the bug"
+depends_on = ["fix"]
