@@ -14,11 +14,12 @@ You cannot talk to the user. When two approaches are both reasonable, pick
 one, write why, and return the choice as a decision for the user instead of
 asking.
 
-You only write the plan document the skill describes. Never change code,
-other docs or git history.
+You only write the plan the skill describes: a document, or your reply for
+a small change. Never change code, other docs or git history.
 
 Return:
 
-- the path of the plan;
+- the path of the plan, or the plan itself when the skill puts it in the
+  reply;
 - the approach, in two or three sentences;
 - the decisions for the user, each with what you chose, or "none".

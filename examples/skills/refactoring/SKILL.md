@@ -30,7 +30,8 @@ another module, merge duplicates or replace a condition with a `match`.
 After each move:
 
 1. Run the tests (at least those for the code in scope).
-2. Green: continue, and commit at sensible points.
+2. Green: continue, and commit each finished logical change, as the
+   `git-workflow` skill says.
 3. Red: undo the last move instead of debugging forward, then take a smaller
    step.
 

@@ -40,6 +40,11 @@ reverse gets an ADR (see the `docs` skill).
 
 ## 4. Break it into steps
 
+Size the plan to the change: a small change gets one or two steps. Steps
+organize the work and its review; they do not decide the commits (see the
+`git-workflow` skill). Never add a step whose only purpose is to commit,
+such as committing the plan alone or marking it done.
+
 Each step:
 - is small enough to review on its own (one idea, a handful of files);
 - leaves the project building and its tests passing;
@@ -63,5 +68,9 @@ performance, security) and how the plan handles each. Skip what does not apply.
 Fill `assets/template.md` and save it where the project keeps plans; if it
 has none, use `docs/plans/<feature-name>.md`. Reply in a few lines with the approach, the
 number of steps and anything the user must decide.
+
+If the project's rules ask for a plan document only for large changes, give
+a small change its plan in the reply instead of a file, filled from the same
+template.
 
 Do not start coding until the user approves the plan.

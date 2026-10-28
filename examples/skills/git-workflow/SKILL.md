@@ -47,6 +47,15 @@ without ever losing someone's work.
 One commit is one logical change that builds and passes tests on its own.
 Split unrelated changes into separate commits; do not mix a refactor with a fix.
 
+Count commits by logical change, never by plan step or by round of review.
+A fix to a commit that is not pushed yet belongs in that commit: commit it
+with `git commit --signoff --fixup <commit>`, then, before you finish, fold
+the fixups in with `git rebase -i --autosquash <base>`, where `<base>` is
+the commit the branch started from (`git merge-base HEAD main`). Set
+`GIT_SEQUENCE_EDITOR=true` when no editor can open. Folding keeps the order
+of the commits, so the branch's last commit stays last. Once a branch is
+pushed, add new commits instead.
+
 ## 3. Push and pull request
 
 - Push only when the user asked, or the project's rules allow it.
