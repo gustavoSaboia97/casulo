@@ -3,3 +3,4 @@
 pub mod doctor;
 pub mod memory;
 pub mod resource_list;
+pub mod terminal;

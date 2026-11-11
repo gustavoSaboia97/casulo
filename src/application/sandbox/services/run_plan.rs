@@ -146,6 +146,14 @@ pub fn plan(request: RunRequest, is_set_on_host: &dyn Fn(&str) -> bool) -> Resul
     );
     spec.network = compose_network;
     spec.terminal = terminal;
+    if terminal {
+        // By name only: docker skips the ones the host does not set.
+        for name in run::TERMINAL_VARIABLES {
+            spec.environment.push(EnvironmentVariable::FromHost {
+                name: name.to_string(),
+            });
+        }
+    }
     if session_hooks {
         spec.environment
             .push(memory_container::session_variable(session_id));
@@ -478,5 +486,37 @@ mod tests {
 
         assert_eq!(plan.spec.command, ["bash"]);
         assert_eq!(plan.spec.network.as_deref(), Some("casulo-demo_default"));
+    }
+
+    fn forwards_terminal(spec: &RunSpec) -> bool {
+        spec.environment.contains(&EnvironmentVariable::FromHost {
+            name: "TERM_PROGRAM".to_string(),
+        })
+    }
+
+    #[test]
+    fn a_terminal_gets_the_host_terminal_variables_by_name() {
+        let plan = plan(request("", built_in_harness("claude")), &nobody_sets).unwrap();
+
+        for name in run::TERMINAL_VARIABLES {
+            assert!(
+                plan.spec
+                    .environment
+                    .contains(&EnvironmentVariable::FromHost {
+                        name: name.to_string()
+                    }),
+                "{name}"
+            );
+        }
+    }
+
+    #[test]
+    fn without_a_terminal_no_terminal_variable_is_passed() {
+        let mut piped = request("", built_in_harness("codex"));
+        piped.terminal = false;
+
+        let plan = plan(piped, &nobody_sets).unwrap();
+
+        assert!(!forwards_terminal(&plan.spec));
     }
 }

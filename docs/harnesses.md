@@ -8,6 +8,8 @@ Each agent keeps its login, settings and history in one directory per project, `
 
 Agent credentials are opt-in: `casulo run` forwards the agent's API key variables (such as `ANTHROPIC_API_KEY` or `OPENAI_API_KEY`) by name only when they are set. To use a Claude subscription in every project without logging in to each one, run `claude setup-token` once on the host and export the token as `CLAUDE_CODE_OAUTH_TOKEN`, or put it under `[secrets]` in the global `casulo.toml` (`casulo config`). The file keeps it in plain text and the shell variable wins when both are set. Without either, log in once per project inside the agent.
 
+Logging in inside the container prints a link to open on the host, since the container has no browser. casulo passes the variables that name your terminal (`TERM`, `COLORTERM`, `TERM_PROGRAM`, `LC_TERMINAL` and their versions, `VTE_VERSION`, `WT_SESSION`, `FORCE_HYPERLINK`) by name, so an agent can show it as one clickable link instead of hard-wrapped lines. If your terminal is not recognized, export `FORCE_HYPERLINK=1` before `casulo run`. To select the link with the mouse while the agent is open, hold Option (iTerm2), Shift (most Linux terminals and Windows Terminal), or turn off View › Allow Mouse Reporting (⌘R) in Terminal.app. When the agent exits, casulo turns off mouse reporting and bracketed paste, so a terminal left in those modes by an agent that was killed can select and copy again.
+
 ## Models
 
 The model and reasoning effort of each agent go in the global `casulo.toml`, one table per agent. Names are passed through as written, since only the agent knows its models:
