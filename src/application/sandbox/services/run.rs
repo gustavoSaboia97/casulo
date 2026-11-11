@@ -43,6 +43,24 @@ pub fn agent_command(harness: &Harness, settings: &ModelSettings) -> (Vec<String
     (command, warnings)
 }
 
+/// Variables that say which terminal is attached, passed by name to an
+/// agent with a terminal. Without them the container only sees
+/// `TERM=xterm`: the agent cannot tell the terminal supports clickable
+/// links, so it hard-wraps a long URL, such as the login link, into lines
+/// that cannot be clicked or copied whole. They name the terminal and
+/// grant nothing.
+pub const TERMINAL_VARIABLES: [&str; 9] = [
+    "TERM",
+    "COLORTERM",
+    "TERM_PROGRAM",
+    "TERM_PROGRAM_VERSION",
+    "LC_TERMINAL",
+    "LC_TERMINAL_VERSION",
+    "VTE_VERSION",
+    "WT_SESSION",
+    "FORCE_HYPERLINK",
+];
+
 /// The mount that keeps the agent's login, settings and history between
 /// runs: `config/<harness>/` of this project on the host, at the harness's
 /// `config_dir` in the container. `None` when the harness declares none.

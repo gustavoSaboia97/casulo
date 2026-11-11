@@ -21,6 +21,7 @@ use crate::application::sandbox::services::{build, compose, inject, mask, run};
 use crate::application::shared::domain::{CasuloHome, ProjectName};
 use crate::cli::args::RunArgs;
 use crate::cli::environment;
+use crate::cli::output;
 use crate::infrastructure::agent_files;
 use crate::infrastructure::config_file;
 use crate::infrastructure::docker::Docker;
@@ -121,6 +122,9 @@ pub fn start_container(arguments: RunArgs, command: Option<Vec<String>>) -> Resu
         start_memory(&home, &project, &runtime, memory_spec)?;
     }
     let result = runtime.run(&spec);
+    if spec.terminal {
+        output::terminal::restore_after_agent();
+    }
     if memory_spec.is_some() {
         // A failure here must not hide the agent's exit code.
         if let Err(error) = memory_service::stop_if_last(&runtime, &project, spec.name.as_deref()) {
